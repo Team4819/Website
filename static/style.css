@@ -1,0 +1,117 @@
+body{
+    background-color: black;
+    color: white;
+}
+#Logo{
+    float: left;
+    width: 25%;
+    text-align: center;
+}
+
+.image{
+    text-align: center;
+}
+
+.photocredit{
+    font-size: small;
+    text-align: center;
+}
+
+a img {
+    border: 0;
+}
+
+a:visited{
+    color: white;    
+}
+
+a:link{
+    color: #FF2945;
+}
+
+#Navigation{
+   float: left;
+   width:  70%;
+   margin-left: 5%;
+}
+
+#Navigation>div{
+    width: 16%;
+    float: left;
+    text-align: center;
+    cursor: pointer;
+}
+
+#Navigation>div>a>img{
+    width: 50px;
+}
+
+#Navigation>div>h2{
+    margin-top: 10px;
+}
+
+.navLink1{
+   margin-top: 5px;
+}
+
+.navLink2{
+    margin-top: 75px;
+}
+
+#Body{
+    clear: both;
+}
+
+#News>#Posts>.post{
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+#Album>div{
+    margin: 30px;
+}
+
+#banner{
+    background-color: #585858;
+    margin-top: 0px;
+    padding-top: 0px;
+}
+
+
+#Sidebar{
+    float: left;
+    width: 25%;
+    padding-top: 50px;
+}
+
+#SponsorsBar{
+    text-align: center;
+    margin-top: 100px;
+}
+
+.Sponsor{
+    width: 50px;
+    margin: 10px;
+    text-align: center;
+}
+
+#Sponsors img{
+    margin: 20px;
+}
+
+#Updates>.post>img{
+    width: 90%;
+}
+
+#Content{
+    float: left;
+    width: 70%;
+}
+
+#footer{
+    clear: both;
+    text-align: center;
+    background-color: #585858;
+    margin: 0px;    
+}
+

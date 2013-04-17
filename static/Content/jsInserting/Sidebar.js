@@ -1,0 +1,1 @@
+$("#Sidebar").append('<div id="Updates"><script src="getMiniPosts.py"></script></div><div id="Sponsors"></div>');
