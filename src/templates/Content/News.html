@@ -1,0 +1,17 @@
+<div id="News">
+    <h1>News</h1>
+    <div id="News"></div>
+    {% if posts %}
+    {% for post in posts %}
+    <div class="post">
+    <h3>{{post.title}}</h3>
+    <div class='Content'>{{post.content}}</div>
+    <div class='Author'><b>posted by {{post.author}}</b></div>
+    <p class='Date'>{{post.date}}</p>
+    </div>
+    <hr/>
+    {% endfor %}
+    {% else %}
+    <p>No posts found</p>
+    {% endif %}
+</div>
