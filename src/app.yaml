@@ -6,8 +6,8 @@ threadsafe: yes
 
 handlers:
    
-- url: /media/.*
-  script: serveMedia.app
+#- url: /static/.*
+#  script: serveMedia.app
     
 - url: /upload.py
   script: addImage.app
@@ -27,52 +27,55 @@ handlers:
 - url: /MainPage
   script: addpost.app
   
-- url: /Content/(.*)
-  mime_type: text/html
-  static_files: static/Content/\1.html
-  upload: static/Content/(.*)\.html
-  
-- url: /Content/getSidebar.py
-  script: getSidebar.app
 
-- url: /(News|Album|Code|Awards|Sponsors|About|Robots)
-  static_files: static/index.html
-  upload: static/index.html
-
-- url: /(.*\.css)
+- url: /static/(.*\.css)
   mime_type: text/css
   static_files: static/\1
   upload: static/(.*\.css)
 
-- url: /(.*\.html)
+- url: /static/(.*\.html)
   mime_type: text/html
   static_files: static/\1
   upload: static/(.*\.html)
 
-- url: /(.*\.js)
+- url: /static/(.*\.js)
   mime_type: text/javascript
   static_files: static/\1
   upload: static/(.*\.js)
 
-- url: /(.*\.txt)
+- url: /static/(.*\.txt)
   mime_type: text/plain
   static_files: static/\1
   upload: static/(.*\.txt)
   
-- url: /(.*\.pdf)
+- url: /static/(.*\.pdf)
   mime_type: application/pdf
   static_files: static/\1
   upload: static/(.*\.pdf)
 
-- url: /(.*\.xml)
+- url: /static/(.*\.xml)
   mime_type: application/xml
   static_files: static/\1
   upload: static/(.*\.xml)
-
+  
 # image files
-- url: /(.*\.(bmp|gif|ico|jpeg|jpg|png))
+- url: /static/(.*\.(bmp|gif|ico|jpeg|jpg|png))
   static_files: static/\1
   upload: static/(.*\.(bmp|gif|ico|jpeg|jpg|png))
+  
+
+- url: /Pages/(.*)
+  script: python.getPage.app
+
+
+- url: /(.*)
+  script: python.main.app
+
+- url: /
+  script: python.main.app
+
+
+
 
 # index files
 #- url: /(.+)/
@@ -84,11 +87,13 @@ handlers:
 #  static_files: static/redirector.html
 #  upload: static/redirector.html
 
-# site root
-- url: /
-  static_files: static/index.html
-  upload: static/index.html
+env_variables:
+  DJANGO_SETTINGS_MODULE: 'settings'
 
 libraries:
 - name: webapp2
   version: "2.5.2"
+  
+- name: django
+  version: latest
+

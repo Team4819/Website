@@ -24,6 +24,6 @@ function fillNews(data) {
 }
 
 function changePage(path) {
-    $.get("/Pages"+path,fillContent);
+    $.get("/Page"+path,fillContent);
     
 }

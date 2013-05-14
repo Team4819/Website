@@ -6,13 +6,7 @@ import webapp2
 from google.appengine.ext import db
 from google.appengine.api import users
 
-class Post(db.Model):
-    author = db.StringProperty()
-    title = db.StringProperty(multiline=True)
-    shortContent = db.StringProperty(multiline=True)
-    content = db.TextProperty()
-    date = db.StringProperty()
-    pic = db.StringProperty()
+
 
 def archive_key(archive_name=None):
     return db.Key.from_path('Archive', archive_name or 'default_archive')
