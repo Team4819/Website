@@ -1,21 +1,32 @@
 import webapp2
 import urllib
 
+from django import template
 from django.template import loader, Context
-from pages import about
+from pages import about, PageNotFound
 
 def getGenericPage(resource):
+    try:
         temp = loader.get_template(resource + ".html")
-        cont = Context({})
-        return temp.render(cont) 
+        
+    except template.TemplateDoesNotExist:
+        return PageNotFound.getPage(resource)
+        
+    cont = Context({})
+    return temp.render(cont) 
+
+        
     
-Pages = {"About": about.getPage, "Album": getGenericPage, "Robots": getGenericPage, "News": getGenericPage, "Awards": getGenericPage, "Sponsors": getGenericPage}
+Pages = { "None": about.getPage, "About": getGenericPage, "Album": getGenericPage, "Robots": getGenericPage, "News": getGenericPage, "Awards": getGenericPage, "Sponsors": getGenericPage}
 
 def getPage(resource):
-    resource = str(resource)
-    part=resource.split("/",2)[0]
-    if(part == ""): part = "About"
-    result = Pages[part](resource)
+    resource=str(urllib.unquote(resource))
+    split=resource.split("/")[0]
+    try:
+        result = Pages[split](resource)
+    except KeyError: 
+        result = PageNotFound.getPage(resource)
+    
     return result
         
 class getPageHandler(webapp2.RequestHandler):

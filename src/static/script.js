@@ -15,7 +15,7 @@ function load() {
 function fillContent(data) {
     $("#Content").empty();
     $("#Content").append(data);
-//   history.pushState({},path,path);
+    
 }
 
 function fillNews(data) {
@@ -25,5 +25,5 @@ function fillNews(data) {
 
 function changePage(path) {
     $.get("/Pages"+path,fillContent);
-    
+    history.pushState({},path,path);
 }

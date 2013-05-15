@@ -1,6 +1,5 @@
 
 import webapp2
-import urllib
 import getPage
 
 from django.template import Context, loader
@@ -19,5 +18,5 @@ class MainHandler(webapp2.RequestHandler):
         self.response.out.write(result)
 
 app = webapp2.WSGIApplication([
-    ('(.+)?', MainHandler)
-], debug=True)
+    ('/(.+)?', MainHandler)
+], debug=True) 
