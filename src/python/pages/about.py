@@ -1,6 +1,6 @@
 from django.template import Context,loader
 
-def getPage(resource):
+def getPage(resource, user):
         temp = loader.get_template("About.html")
         cont = Context({})
         result = temp.render(cont)

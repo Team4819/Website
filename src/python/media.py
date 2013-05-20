@@ -19,12 +19,12 @@ class Folder(db.Model):
     Name = db.StringProperty()
     
 def Media_key():
-    return db.Key.from_path('media-version', 'media-0.2')
+    return db.Key.from_path('media-version', 'media-2')
 
 def getFolderKey(name):
     folderKey = db.GqlQuery("SELECT _key_"
                             "FROM Folder"
-                            "WHERE ANCESTOR IS :1  Name = :2"
+                            "WHERE ANCESTOR IS :1 AND Name = :2"
                             "LIMIT 10",
                             Media_key(),name)
     return folderKey[0]

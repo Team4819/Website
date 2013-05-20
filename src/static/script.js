@@ -27,3 +27,7 @@ function changePage(path) {
     $.get("/Pages"+path,fillContent);
     history.pushState({},path,path);
 }
+
+function logoutPage(){
+	changePage("/logout")
+}

@@ -1,11 +1,12 @@
 application: firstteam4819
-version: 1-1-0
+version: 2-0-0
 runtime: python27
 api_version: 1
 threadsafe: yes
 
 handlers:
-   
+
+  
 #- url: /static/.*
 #  script: serveMedia.app
     
@@ -15,7 +16,7 @@ handlers:
 - url: /addImage.py
   script: addImage.app
     
-- url: /getPosts.py
+- url: /getPosts.py 
   script: getPosts.app
   
 - url: /getMiniPosts.py
@@ -27,7 +28,17 @@ handlers:
 - url: /MainPage
   script: addpost.app
   
-
+- url: /favicon.ico
+  static_files: static/favicon.ico
+  upload: static/favicon.ico
+  
+- url: /python/login
+  script: python.scripts.login.app
+  
+- url: /python/CreateUser
+  script: python.scripts.CreateUser.app
+  
+  
 - url: /static/(.*\.css)
   mime_type: text/css
   static_files: static/\1

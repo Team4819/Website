@@ -33,6 +33,7 @@
         <div class="navLink2" onclick="changePage('/News')"><a><img src="/static/Nav/1269850054.png"/><h2>News</h2></a></div>
         <div class="navLink1" onclick="changePage('/Awards')"><a><img src="/static/Nav/cup.png"/><h2>Awards</h2></a></div>
         <div class="navLink2" onclick="changePage('/Sponsors')"><a><img style='width: 25px;' src="/static/Nav/dollar-sign.png"/><h2>Sponsors</h2></a></div>
+       
     </div>
 </div>
 <div id="Body">
@@ -48,8 +49,12 @@
                 <a href='http://usfirst.org' target="_blank"><img width="125" src="http://www.usfirst.org/uploadedImages/Robotics_Programs/FRC/FRC_Communications_Resource_Center/Branding_and_Logos/FRCicon_Reverse.gif"/></a>
             </div>
         </div>
-        <div id="Updates">
-            
+        <div id="auth" >
+        {% if Username %}
+        	<img width="50" src="/static/Nav/id-card-md.png"  /><h3>Welcome, {{Username}}! </br> <a onclick="changePage('/logout') ">Log out.</a></h3>
+        {% else %}
+            <a onclick="changePage('/login')><img width="50" src="/static/Nav/id-card-md.png"  /><h3>Sign in</h3></a>
+        {% endif %}
         </div>
         <div id="SponsorsBar">
             <h2>Our Proud Sponsors</h2>

@@ -84,9 +84,14 @@ a:link{
     padding-top: 50px;
 }
 
+#auth{
+	text-align: center;
+	margin-top: 75px;
+}
+
 #SponsorsBar{
     text-align: center;
-    margin-top: 100px;
+    margin-top: 75px;
 }
 
 .Sponsor{
