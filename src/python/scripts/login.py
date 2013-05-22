@@ -5,14 +5,16 @@ from .. import auth
 
 class Login(webapp2.RequestHandler):
     def post(self):
-        username = self.request.get('Username')
+        firstName = self.request.get('firstName')
+        lastName = self.request.get('lastName')
         password = self.request.get('Password')
-        logging.info(username + " " + password)
+        logging.info(firstName + " " + lastName + " " + password)
         try:
-            authKey = auth.logIn(username, password)
+            authKey = auth.logIn(firstName, lastName, password)
+            user = auth.authorize(authKey)
             self.response.set_cookie("authKey", authKey, 36000 , "/")
             self.response.set_cookie("LoginStatus", "LoggedIn", 36000 , "/")
-            self.response.out.write('LoginSuccessfull')
+            self.response.out.write(user.firstName)
         except auth.invalidLogon:
             self.response.set_cookie("loginStatus", "InvalidLogin", 36000 , "/")
             self.response.out.write('InvalidLogin')

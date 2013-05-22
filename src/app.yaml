@@ -35,9 +35,20 @@ handlers:
 - url: /python/login
   script: python.scripts.login.app
   
+- url: /python/logout
+  script: python.scripts.logout.app
+  
 - url: /python/CreateUser
   script: python.scripts.CreateUser.app
   
+- url: /python/newPost
+  script: python.scripts.newPost.app
+
+- url: /python/editPost
+  script: python.scripts.editPost.app
+  
+- url: /python/newComment
+  script: python.scripts.newComment.app
   
 - url: /static/(.*\.css)
   mime_type: text/css

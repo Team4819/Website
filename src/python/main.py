@@ -21,15 +21,16 @@ class MainHandler(webapp2.RequestHandler):
             logging.info(self.request.cookies.get("authKey"))
             
             user = auth.authorize(self.request.cookies.get("authKey"))
+            content = getPage.getPage(resource, user)
             if (user): 
-                cont = Context({"content": content, "Username": user.username})
+                cont = Context({"content": content, "Username": user.firstName})
             else:
                 cont = Context({"content": content})
         else:
+            user = auth.publicUser
+            content = getPage.getPage(resource, user)
             cont = Context({"content": content})
-            user = None
             
-        content = getPage.getPage(resource, user)
             
         result = temp.render(cont)
         self.response.headers['Content-Type'] = "text/html"

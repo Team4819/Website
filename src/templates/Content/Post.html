@@ -1,0 +1,49 @@
+<div class="post">
+    <h2>{{post.title}}</h2>
+    {% if user.permissions >= 2 %}<a class="link" style="color: red;" onclick="changePage('/Updates/{{post.title|urlencode}}/Edit')">edit</a>{% endif %}
+    <div class='Content'>{{post.content|safe}}</div>
+    <br/>
+    <br/>
+    <div class='Author'><b>posted by {{post.author}}</b></div>
+    <p class='Date'>{{post.date}}</p>
+    <hr/>
+    <br/>
+    <div class="newComment">
+    <h2>Comment with your thoughts:</h2>
+    <div><input type="text" id="author" value="{{user.firstName}} {{user.lastName}}"></div>
+    <div><textarea id="content"></textarea></div>
+    <div><button onclick="comment()">Comment</button></div>
+    </div>
+    <div class="comments">
+    {% if comments %}
+    	{% for comment in comments %}
+    	<br/>
+    	<br/>
+    	<div class="comment">
+    	<div><p><b class="author">{{comment.author}}</b> commented on {{comment.date}}</p></div>
+    	<div class="content"><p>{{comment.content}}</p></div>
+    	</div>
+    	<hr/>
+    	{% endfor %}
+    {% else %}
+    <p>no comments found</p>
+    {% endif %}
+    </div>
+</div>
+<script>
+$("#content").keyup(function(event){
+    if(event.keyCode == 13){
+        comment();
+    }
+});
+function comment(){
+	data = {}
+	data.title = '{{post.title}}'
+	data.author = $("#author")[0].value
+	data.content = $("#content")[0].value
+	$.post("/python/newComment", data, commentCallback)
+}
+function commentCallback(data){
+	reloadContent();
+}
+</script>

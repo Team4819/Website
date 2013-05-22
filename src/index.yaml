@@ -10,6 +10,12 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
+- kind: Comment
+  ancestor: yes
+  properties:
+  - name: date
+    direction: desc
+
 - kind: Image
   ancestor: yes
   properties:
@@ -19,5 +25,27 @@ indexes:
 - kind: Post
   ancestor: yes
   properties:
+  - name: date
+    direction: desc
+
+- kind: Post
+  ancestor: yes
+  properties:
+  - name: restricted
+  - name: date
+    direction: desc
+
+- kind: Post
+  ancestor: yes
+  properties:
+  - name: restricted
+  - name: tags
+  - name: date
+    direction: desc
+
+- kind: Post
+  ancestor: yes
+  properties:
+  - name: tags
   - name: date
     direction: desc

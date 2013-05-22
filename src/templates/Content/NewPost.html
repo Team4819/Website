@@ -1,0 +1,20 @@
+<h1>New Post</h1>
+<script src="/static/ckeditor/ckeditor.js"></script>
+<p>Title <input id="title"></input> Restricted<input type="checkbox" id="restricted"> <button onclick="Post()" id="postButton">Post</button></p>
+<textarea id="editor" ></textarea>
+
+<script>
+CKEDITOR.replace('editor');
+function Post(){
+data = {}
+data.title = $("#title")[0].value
+data.content = CKEDITOR.instances.editor.getData();
+if($('#restricted')[0].checked)data.restricted = true;
+else data.restricted = false;
+$.post('/python/newPost', data, PostCallback)
+}
+
+function PostCallback(data){
+changePage("/Updates")
+}
+</script>

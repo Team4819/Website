@@ -1,5 +1,6 @@
 <div id="CreateUser">
-<div><p>Username:</p><input id="Username" name="Username"></input></div>
+<div><p>First Name:</p><input id="firstName" name="firstName"></input></div>
+<div><p>Last Name:</p><input id="lastName" name="lastName"></input></div>
 <div><p>Password:</p><input id="Password" name="Password" type="password"></input></div>
 <div><p>Permissions:</p><input id="Permissions"  name="Permissions"></input></div>
 <button onclick="CreateUser()">Create User</button>
@@ -7,7 +8,8 @@
 <script>
 function CreateUser(){
  var data = {};
- data.Username = $("#Username")[0].value;
+ data.firstName = $("#firstName")[0].value;
+ data.lastName = $("#lastName")[0].value;
  data.Password = $("#Password")[0].value;
  data.Permissions = $("#Permissions")[0].value;
  $.post("/python/CreateUser",data,function(data){changePage("/Login");});

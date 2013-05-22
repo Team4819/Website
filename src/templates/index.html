@@ -30,7 +30,7 @@
         <div class="navLink1" onclick="changePage('/About')"><a><img src="/static/Nav/about.png"/><h2>About Us</h2></a></div>
         <div class="navLink2" onclick="changePage('/Album')"><a><img src="/static/Nav/entertainment-photos-line_drawing.png"/><h2>Album</h2></a></div>
         <div class="navLink1" onclick="changePage('/Robots')"><a><img src="/static/Nav/Silveira_Neto_Robot_with_a_claw.png"/><h2>Robots</h2></a></div>
-        <div class="navLink2" onclick="changePage('/News')"><a><img src="/static/Nav/1269850054.png"/><h2>News</h2></a></div>
+        <div class="navLink2" onclick="changePage('/Updates')"><a><img src="/static/Nav/1269850054.png"/><h2>Team Updates</h2></a></div>
         <div class="navLink1" onclick="changePage('/Awards')"><a><img src="/static/Nav/cup.png"/><h2>Awards</h2></a></div>
         <div class="navLink2" onclick="changePage('/Sponsors')"><a><img style='width: 25px;' src="/static/Nav/dollar-sign.png"/><h2>Sponsors</h2></a></div>
        
@@ -51,9 +51,9 @@
         </div>
         <div id="auth" >
         {% if Username %}
-        	<img width="50" src="/static/Nav/id-card-md.png"  /><h3>Welcome, {{Username}}! </br> <a onclick="changePage('/logout') ">Log out.</a></h3>
+        	<img width="50" src="/static/Nav/id-card-md.png"  /><h3>Welcome, {{Username}}! </br> <a class="link" onclick="logout()">Log out.</a></h3>
         {% else %}
-            <a onclick="changePage('/login')><img width="50" src="/static/Nav/id-card-md.png"  /><h3>Sign in</h3></a>
+            <a class="link" onclick="loginPage()"><img width="50" src="/static/Nav/id-card-md.png"  /><h3>Sign in</h3></a>
         {% endif %}
         </div>
         <div id="SponsorsBar">
@@ -64,7 +64,7 @@
             <div class='image' class='Sponsor'>
                 <a href='http://www.jcpenney.com' target="_blank"><img src='/static/Sponsors/JCPenny.png'/></a>
             </div>
-            <p>For a complete list of our sponsors,<br/> or to support our team,<br/> please visit our <u><a style="cursor: pointer;" onclick="changePage('/Sponsors')">sponsor page</a></u>.</p>
+            <p>For a complete list of our sponsors,<br/> or to support our team,<br/> please visit our <u><a class="link" onclick="changePage('/Sponsors')">sponsor page</a></u>.</p>
         </div>
     </div>
     <div id="Content">

@@ -1,29 +1,18 @@
 <div id="login">
-<div><p>Username:</p><input id="Username" name="Username"></input></div>
+<div><p>First Name:</p><input id="firstName" name="firstName"></input></div>
+<div><p>Last Name:</p><input id="lastName" name="lastName"></input></div>
 <div><p>Password:</p><input id="Password" name="Password" type="password"></input></div>
-<a onclick="login()">log in</a>
+<div>
+<a class="link" onclick="login()">Log In</a>
+</div>
+<div>
+<a class="link" onclick="changePage('/CreateUser')">or Create a new user.</a>
+</div>
 </div>
 <script>
-function login(){
-var data = {};
-data.Username= $("#Username")[0].value;
-data.Password= $("#Password")[0].value;
-$.post("/python/login",data,loginCallback);
-username = $("#Username")[0].value;
-$("#login").empty();
-$("#login").append("<p>logging in</p>");
-}
-
-function loginCallback(data){
-	if(data == "LoginSuccessfull"){
-		$("#auth").empty();
-		$("#auth").append("<img width='50' src='/static/Nav/id-card-md.png'  /><h3>Welcome, " + username  + "; </br> <a onclick='logoutPage()'>Log out.</a></h3>");
-		changePage("/About");
-	}
-	else if(data == "InvalidLogin"){
-		$("#login").empty();
-		$("#login").append('<div id="login"><p>Username:</p><input id="Username" name="Username"></input></div><div><p>Password:</p><input name="Password" type="password" id="Password"></input></div><a onclick="login()">log in</a><p>invalid login</p>');
-	}
-}
-
+$("#Password").keyup(function(event){
+    if(event.keyCode == 13){
+        login();
+    }
+});
 </script>

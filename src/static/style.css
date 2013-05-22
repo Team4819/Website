@@ -84,6 +84,10 @@ a:link{
     padding-top: 50px;
 }
 
+.link{
+	cursor: pointer;
+}
+
 #auth{
 	text-align: center;
 	margin-top: 75px;

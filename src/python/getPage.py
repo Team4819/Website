@@ -4,7 +4,7 @@ import auth
 
 from django import template
 from django.template import loader, Context
-from pages import about, PageNotFound
+from pages import about, PageNotFound, teamUpdates
 
 def getGenericPage(resource, user):
     try:
@@ -13,12 +13,30 @@ def getGenericPage(resource, user):
     except template.TemplateDoesNotExist:
         return PageNotFound.getPage(resource)
         
-    cont = Context({"user": user})
+    cont = Context({"user": user}) 
     return temp.render(cont) 
 
-        
+def getAdminPage(resource, user):
+    if(user.permissions < 3):
+        return getGenericPage('accessDenied', user)
+    else:
+        return getGenericPage(resource, user)
     
-Pages = { "None": about.getPage}
+def getWriterPage(resource, user):
+    if(user.permissions < 2):
+        return getGenericPage('accessDenied', user)
+    else:
+        return getGenericPage(resource, user)
+    
+def getReaderPage(resource, user):
+    if(user.permissions < 1):
+        return getGenericPage('accessDenied', user)
+    else:
+        return getGenericPage(resource, user)
+    
+
+            
+Pages = { "None": about.getPage, "Updates": teamUpdates.getPage}
 
 def getPage(resource, user):
     resource=str(urllib.unquote(resource))
@@ -35,7 +53,7 @@ class getPageHandler(webapp2.RequestHandler):
             resource=str(urllib.unquote(resource))
             if(self.request.cookies.get("LoginStatus") == "LoggedIn"):
                 user = auth.authorize(self.request.cookies.get("authKey"))
-            else: user = None
+            else: user = auth.publicUser
             
             self.response.headers["Content-Type"] = "text/html"
             self.response.out.write(getPage(resource, user))

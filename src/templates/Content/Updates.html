@@ -1,0 +1,18 @@
+    <h1>Team Updates</h1>{% if user.permissions >= 2 %}<h3 class="link" style="text-align: right;" onclick="changePage('/Updates/New')">New Post</h3>{% endif %}
+    <div id="teamUpdates">
+    {% if updates %}
+    {% for post in updates %}
+    <div class="post">
+    <a class="link" onclick="changePage('/Updates/{{post.title|urlencode}}')"><h3>{{post.title}}</h3></a>
+    <div class='Content'>{{post.content|safe}}</div>
+    <br/>
+    <br/>
+    <div class='Author'><b>posted by {{post.author}}</b></div>
+    <p class='Date'>{{post.date}}</p>
+    </div>
+    <hr/>
+    {% endfor %}
+    {% else %}
+    <p>No posts found</p>
+    {% endif %}
+    </div>
