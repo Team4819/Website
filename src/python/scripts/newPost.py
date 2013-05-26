@@ -19,6 +19,7 @@ class newPost(webapp2.RequestHandler):
         if( self.request.get('restricted') == 'true' ): newpost.restricted = True
         else: newpost.restricted = False
         newpost.tags = ["all"]
+        newpost.comments = 0
         newpost.put()
         self.response.out.write('Posted Successfully')
             

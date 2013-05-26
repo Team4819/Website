@@ -1,0 +1,32 @@
+<h2>{{folder.Name}}</h2>
+{% if user.permissions >= 2 %}
+<div style="float: left;" class="button" onclick="$('#upload')[0].hidden = false;">
+<h3>Upload file</h3>
+</div>
+
+<div class="panel" id="upload" hidden="true">
+<form id="blobUpload" action="{{url}}" method="post" enctype="multipart/form-data">
+<p>File:<input type="file" name="file"></p>
+<p>Description:</p><textarea id="description" rows="5" cols="30"></textarea>
+<p>Restricted:<input type="checkbox" name="restricted">
+<input type="submit">
+</form>
+</div>
+<script>
+$(document).ready(function(){
+$("#blobUpload").ajaxForm(function(){reloadContent()})
+})
+</script>
+{% endif %}
+<div id="files" >
+{% for file in files %}
+<a style="text-decoration: none;color:white;" onclick="navigate(event, this)" href="/Media/{{folder.Name}}/{{file.Name}}" class="file">
+{% if file.Type == "image" %}
+<img src="/static/media/{{folder.Name}}/{{file.Name}}?resize=true&width=200&height=150">
+{% else %}
+<img src="/static/file_icon.png">
+{% endif %}
+<p>{{file.Name}}</p>
+</a>
+{% endfor %}
+</div>

@@ -15,6 +15,8 @@ class User(db.Model):
     passwordHash = db.StringProperty()
     permissions = db.IntegerProperty()
     keyHash = db.StringProperty()
+    email = db.EmailProperty()
+    number = db.PhoneNumberProperty()
     
 class publicUser(User):
     firstName = "Public"
@@ -71,11 +73,13 @@ def logIn(firstName, lastName, password):
     user.put()
     return key
 
-def createUser(firstName, lastName, password, permissions):
+def createUser(firstName, lastName, email, number, password):
     newuser = User(parent=UserTable_key())
     newuser.firstName = firstName
     newuser.lastName = lastName
     newuser.lcaseName = str(firstName).lower() + " " + str(lastName).lower()
     newuser.passwordHash = hashlib.md5(password).hexdigest()
-    newuser.permissions = int(permissions)
+    newuser.permissions = 1
+    newuser.email = email
+    newuser.number = number
     newuser.put()

@@ -1,0 +1,47 @@
+
+
+<h2>Media</h2>
+
+{% if user.permissions >= 2 %}
+<script>
+function openNewFolder(){
+	$("#newFolder")[0].hidden=false;
+}
+
+function newFolder(){
+	data = {};
+	data.name = $("#Name")[0].value;
+	data.description = $("#Description")[0].value;
+	if($("#Restricted")[0].checked == true) data.restricted = "true"
+	else data.restricted = "false"
+	$.post("/python/newFolder", data, newFolderCallback)
+	
+}
+
+function newFolderCallback(data){
+	reloadContent();
+}
+
+</script>
+<div style="float: left;" onclick="openNewFolder()" class="button">
+<h3>New Folder</h3>
+</div>
+<div class="panel" id="newFolder" hidden="true" >
+<p>Name:<input type="text" id="Name"></p>
+<p>Description:</p><textarea id="Description" rows="5" cols="30"></textarea>
+<p>Restricted:<input type="checkbox" id="Restricted"></p>
+<button onclick="newFolder()">Create Folder</button>
+</div>
+{% endif %}
+
+<div id="folders" >
+{% for folder in folders %}
+<a style="text-decoration: none;color:white;" class="folder" onclick="navigate(event, this)" href="/Media/{{folder.name}}">
+<img alt="{{folder.description}}" src="{{folder.thumbnail}}">
+<p class="title">{{folder.name}}</p>
+<p class="date"> {{folder.date}}</p>
+</a>
+{% endfor %}
+</div>
+
+

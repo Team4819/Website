@@ -1,14 +1,12 @@
-<div id="login">
+<h2>Login</h2>
+<div id="login" class="panel">
 <div><p>First Name:</p><input id="firstName" name="firstName"></input></div>
 <div><p>Last Name:</p><input id="lastName" name="lastName"></input></div>
 <div><p>Password:</p><input id="Password" name="Password" type="password"></input></div>
-<div>
-<a class="link" onclick="login()">Log In</a>
 </div>
-<div>
-<a class="link" onclick="changePage('/CreateUser')">or Create a new user.</a>
-</div>
-</div>
+<a style="float: left; text-decoration: none; color: white;" class="button" onclick="login(); return false;" href="/Login">
+<p>Log In</p>
+</a>
 <script>
 $("#Password").keyup(function(event){
     if(event.keyCode == 13){

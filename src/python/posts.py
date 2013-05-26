@@ -13,6 +13,7 @@ class Post(db.Model):
     tags = db.StringListProperty()
     date = db.DateTimeProperty(auto_now_add=True)
     restricted = db.BooleanProperty()
+    comments = db.IntegerProperty()
 
 class Comment(db.Model):
     author = db.StringProperty()

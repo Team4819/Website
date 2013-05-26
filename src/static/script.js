@@ -7,12 +7,21 @@ function reloadContent(){
 }
 
 function load() {
-    url = window.location.pathname;
-    if (url == '/') {
-        url = '/About'
-    }
+	$(window).bind('popstate', function(event) {
+	    url = window.location.pathname;
+	    if (url == '/') {
+	        url = '/About'
+	    }
+	    $.get("/Pages"+url,fillContent);
+	    _gaq.push(['_trackPageview']);
+	});
 }
 
+function navigate(e, target){
+	changePage(target.getAttribute('href'));
+	e.preventDefault()
+	
+}
 
 function fillContent(data) {
     $("#Content").empty();
@@ -27,7 +36,12 @@ function fillNews(data) {
 
 function changePage(path) {
     $.get("/Pages"+path,fillContent);
-    history.pushState({},path,path);
+    url = window.location.pathname;
+    if (url == '/') {
+        url = '/About'
+    }
+    history.pushState({"path": url},"",path);
+    _gaq.push(['_trackPageview']);
 }
 
 function loginPage(){
@@ -53,7 +67,7 @@ function loginCallback(data){
 	}
 	else{
 		$("#login").empty();
-		$("#login").append('<div id="login"><div><p>First Name:</p><input id="firstName" name="firstName"></input></div><div><p>Last Name:</p><input id="lastName" name="lastName"></input></div><div><p>Password:</p><input id="Password" name="Password" type="password"></input></div></div><a onclick="login()">log in</a><p>invalid login</p>');
+		$("#login").append('<div id="login"><div><p>First Name:</p><input id="firstName" name="firstName"></input></div><div><p>Last Name:</p><input id="lastName" name="lastName"></input></div><div><p>Password:</p><input id="Password" name="Password" type="password"></input></div></div><p style="color: red;">invalid login</p>');
 	}
 }
 

@@ -1,0 +1,13 @@
+<script src="http://malsup.github.com/jquery.form.js"></script>
+<h2>Upload to {{folder}}</h2>
+<form id="blobUpload" action="{{url}}" method="post" enctype="multipart/form-data">
+<p>File:<input type="file" name="file"></p><br/>
+<p>Description:<input type="text" name="description">
+<p>Restricted:<input type="checkbox" name="restricted">
+<input type="submit">Upload</input>
+</form>
+<script>
+$(document).ready(function(){
+$("#blobUpload").ajaxForm(function(){reloadContent()})
+})
+</script>

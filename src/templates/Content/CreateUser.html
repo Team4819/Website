@@ -1,17 +1,30 @@
-<div id="CreateUser">
+<h2>Create User</h2>
+<div class="panel" id="CreateUser">
 <div><p>First Name:</p><input id="firstName" name="firstName"></input></div>
 <div><p>Last Name:</p><input id="lastName" name="lastName"></input></div>
 <div><p>Password:</p><input id="Password" name="Password" type="password"></input></div>
-<div><p>Permissions:</p><input id="Permissions"  name="Permissions"></input></div>
-<button onclick="CreateUser()">Create User</button>
+<div><p>Email:</p><input id="Email"  name="Email"></input></div>
+<div><p>Phone Number:</p><input id="Number"  name="Number"></input></div>
 </div>
+<a class="button" style="float: left; text-decoration: none; color: white;" href="/CreateUser" onclick="CreateUser(); return false;"><p>Create User</p></a>
+<p style="color: red;float: left;clear: both;" hidden="true" id="warning">One or more required fields missing.</p>
 <script>
 function CreateUser(){
  var data = {};
  data.firstName = $("#firstName")[0].value;
  data.lastName = $("#lastName")[0].value;
  data.Password = $("#Password")[0].value;
- data.Permissions = $("#Permissions")[0].value;
- $.post("/python/CreateUser",data,function(data){changePage("/Login");});
+ data.Email = $("#Email")[0].value;
+ data.Number = $("#Number")[0].value;
+ if(data.firstName != "" && data.lastName != "" && data.Password != "" && data.Email != "" && data.Number != "")
+ $.post("/python/CreateUser",data,CreateUserCallback);
+ else
+ $("#warning")[0].hidden = false;
+}
+
+function CreateUserCallback(data){
+		$("#auth").empty();
+		$("#auth").append("<img width='50' src='/static/Nav/id-card-md.png'  /><h3>Welcome, " + data  + "! </br> <a class='link' onclick='logout()'>Log out.</a></h3>");
+		changePage("/About");
 }
 </script>

@@ -15,6 +15,8 @@ class newComment(webapp2.RequestHandler):
         comment.content = self.request.get('content')
         comment.author = user.firstName + " " + user.lastName
         comment.put()
+        post.comments += 1
+        post.put();
         self.response.out.write('Commented Successfully')
             
         

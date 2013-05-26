@@ -4,7 +4,7 @@ import auth
 
 from django import template
 from django.template import loader, Context
-from pages import about, PageNotFound, teamUpdates
+from pages import about, PageNotFound, teamUpdates, Media
 
 def getGenericPage(resource, user):
     try:
@@ -36,7 +36,7 @@ def getReaderPage(resource, user):
     
 
             
-Pages = { "None": about.getPage, "Updates": teamUpdates.getPage}
+Pages = { "None": about.getPage, "Updates": teamUpdates.getPage, "Media": Media.getPage}
 
 def getPage(resource, user):
     resource=str(urllib.unquote(resource))

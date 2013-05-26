@@ -7,6 +7,7 @@
     <meta name="Description" content="Team 4819, The Flat Mountain Mechanics, is a FIRST FRC team based in Mt. Pleasant Michigan">
     <script src="/static/jquery-1.9.1.min.js"></script>
     <script src="/static/script.js"></script>
+    <script src="/static/jquery.form.js"></script>
     <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -27,13 +28,13 @@
         <img onclick="changePage('/About')" src="/static/Logo/Logo-large.png" width="200px"/>
     </div>
     <div id="Navigation">
-        <div class="navLink1" onclick="changePage('/About')"><a><img src="/static/Nav/about.png"/><h2>About Us</h2></a></div>
-        <div class="navLink2" onclick="changePage('/Album')"><a><img src="/static/Nav/entertainment-photos-line_drawing.png"/><h2>Album</h2></a></div>
-        <div class="navLink1" onclick="changePage('/Robots')"><a><img src="/static/Nav/Silveira_Neto_Robot_with_a_claw.png"/><h2>Robots</h2></a></div>
-        <div class="navLink2" onclick="changePage('/Updates')"><a><img src="/static/Nav/1269850054.png"/><h2>Team Updates</h2></a></div>
-        <div class="navLink1" onclick="changePage('/Awards')"><a><img src="/static/Nav/cup.png"/><h2>Awards</h2></a></div>
-        <div class="navLink2" onclick="changePage('/Sponsors')"><a><img style='width: 25px;' src="/static/Nav/dollar-sign.png"/><h2>Sponsors</h2></a></div>
-       
+        <a class="navLink1 link" onclick="navigate(event, this)" href="/About"><img src="/static/Nav/about.png"/><h2>About Us</h2></a>
+        <a class="navLink2 link" onclick="navigate(event, this)" href="/Media"><img src="/static/Nav/entertainment-photos-line_drawing.png"/><h2>Media</h2></a>
+        <a class="navLink1 link" onclick="navigate(event, this)" href="/Robots"><img src="/static/Nav/Silveira_Neto_Robot_with_a_claw.png"/><h2>Robots</h2></a>
+        <a class="navLink2 link" style="margin-top: 60px;" onclick="navigate(event, this)" href="/Updates"><img src="/static/Nav/1269850054.png"/><h2>Team Updates</h2></a>
+        <a class="navLink1 link" onclick="navigate(event, this)" href="/Awards"><img src="/static/Nav/cup.png"/><h2>Awards</h2></a>
+        <a class="navLink2 link" onclick="navigate(event, this)" href="/Sponsors"><img style='width: 25px;' src="/static/Nav/dollar-sign.png"/><h2>Sponsors</h2></a>
+        <a class="navLink1 link" onclick="navigate(event, this)" href="/Code"><img src="/static/Nav/html-bracket.png"/><h2>Code</h2></a>
     </div>
 </div>
 <div id="Body">
@@ -64,7 +65,7 @@
             <div class='image' class='Sponsor'>
                 <a href='http://www.jcpenney.com' target="_blank"><img src='/static/Sponsors/JCPenny.png'/></a>
             </div>
-            <p>For a complete list of our sponsors,<br/> or to support our team,<br/> please visit our <u><a class="link" onclick="changePage('/Sponsors')">sponsor page</a></u>.</p>
+            <p>For a complete list of our sponsors,<br/> or to support our team,<br/> please visit our <u><a class="link" onclick="navigate(event, this)" href="/Sponsors">sponsor page</a></u>.</p>
         </div>
     </div>
     <div id="Content">
