@@ -7,6 +7,7 @@ import logging
 from google.appengine.ext import db
 from google.appengine.ext import blobstore
 from google.appengine.api import images
+from google.appengine.api import files
 from google.appengine.ext.webapp import blobstore_handlers
 
 
@@ -91,11 +92,12 @@ def getFolders(restricted):
                             Media_key())
     return folders
 
-def newFolder(restricted, name, description):
+def newFolder(restricted, name, description, date):
     folder = Folder(parent=Media_key())
     folder.Restricted = restricted
     folder.Name = name
     folder.Description = description
+    folder.Date = date
     folder.put()
         
 class StaticHandler(blobstore_handlers.BlobstoreDownloadHandler):
@@ -132,21 +134,22 @@ class StaticHandler(blobstore_handlers.BlobstoreDownloadHandler):
         except IndexError:
             return
 
-
 class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
     def post(self, resource):
-        resource=str(resource)
+        resource=str(urllib.unquote(resource))
         logging.info(resource)
-        resourceList=resource.split("/")
-        upload_files = self.get_uploads('file')
-        blob_info = upload_files[0]
-        nfile = File(parent=getFolder(resource)[0])
-        nfile.Key = "%s" % blob_info.key()
-        nfile.Name = blob_info.filename
-        nfile.Type = str(blob_info.content_type).split("/")[0]
-        if(self.request.get("restricted")== "on"): nfile.Restricted = True
-        else: nfile.Restricted = False
-        nfile.Description = self.request.get("description")
-        nfile.put()
+        upload_files = self.get_uploads()
+        for f in upload_files:
+            blob_info = f
+            nfile = File(parent=getFolder(resource)[0])
+            nfile.Key = "%s" % blob_info.key()
+            nfile.Name = blob_info.filename
+            nfile.Type = str(blob_info.content_type).split("/")[0]
+            if(self.request.get("restricted")== "on"): nfile.Restricted = True
+            else: nfile.Restricted = False
+            nfile.Description = self.request.get("description")
+            nfile.put()
+        self.redirect("/Media/" + resource)
+        
 
 app = webapp2.WSGIApplication([('/static/media/(.+)?', StaticHandler),('/upload/media/(.+)?', UploadHandler)], debug=True)

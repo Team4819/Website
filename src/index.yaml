@@ -23,6 +23,24 @@ indexes:
   - name: Date
     direction: desc
 
+- kind: File
+  ancestor: yes
+  properties:
+  - name: Name
+    direction: desc
+
+- kind: File
+  ancestor: yes
+  properties:
+  - name: Restricted
+  - name: Name
+    direction: desc
+
+- kind: Folder
+  ancestor: yes
+  properties:
+  - name: Date
+    direction: desc
 
 - kind: Folder
   ancestor: yes
@@ -41,6 +59,13 @@ indexes:
   ancestor: yes
   properties:
   - name: restricted
+  - name: tags
+  - name: date
+    direction: desc
+
+- kind: Post
+  ancestor: yes
+  properties:
   - name: tags
   - name: date
     direction: desc

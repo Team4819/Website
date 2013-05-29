@@ -1,21 +1,24 @@
 <h2>{{folder.Name}}</h2>
+{% if folder.Description != "" %}
+<div style="width: 400px;" class="panel"><p>{{folder.Description}}</p></div>
+{% endif %}
 {% if user.permissions >= 2 %}
 <div style="float: left;" class="button" onclick="$('#upload')[0].hidden = false;">
 <h3>Upload file</h3>
 </div>
 
 <div class="panel" id="upload" hidden="true">
-<form id="blobUpload" action="{{url}}" method="post" enctype="multipart/form-data">
-<p>File:<input type="file" name="file"></p>
-<p>Description:</p><textarea id="description" rows="5" cols="30"></textarea>
+<form id="blobUpload" action="{{url|safe}}" method="post" enctype="multipart/form-data">
+<p>File:<input type="file" name="file[]" multiple></p>
+<p>Description:</p><textarea id="description" name="description" rows="5" cols="30"></textarea>
 <p>Restricted:<input type="checkbox" name="restricted">
 <input type="submit">
 </form>
 </div>
 <script>
-$(document).ready(function(){
-$("#blobUpload").ajaxForm(function(){reloadContent()})
-})
+//$(document).ready(function(){
+//$("#blobUpload").ajaxForm(function(){reloadContent()})
+//})
 </script>
 {% endif %}
 <div id="files" >
@@ -26,7 +29,7 @@ $("#blobUpload").ajaxForm(function(){reloadContent()})
 {% else %}
 <img src="/static/file_icon.png">
 {% endif %}
-<p>{{file.Name}}</p>
+<p class="name">{{file.Name}}</p>
 </a>
 {% endfor %}
 </div>

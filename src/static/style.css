@@ -18,6 +18,10 @@ body{
     text-align: center;
 }
 
+.date{
+	font-size: small;
+}
+
 .photocredit{
     font-size: small;
     text-align: center;
@@ -56,6 +60,7 @@ a:link{
     float: left;
     text-align: center;
     text-decoration: none;
+    color: white;
 }
 
 #Navigation>a>img{
@@ -153,8 +158,6 @@ a:link{
     padding-top: 50px;
 }
 
-
-
 #folders{
 	clear: both;
 }
@@ -168,6 +171,21 @@ a:link{
 	float: left;
 	height: 225px;
 	text-align: center;
+	position: relative;
+}
+
+.folder .date{
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
+.folder .name{
+	position: absolute;
+	bottom: 25px;
+	left: 0;
+	right: 0;
 }
 
 #files{
@@ -176,6 +194,7 @@ a:link{
 
 .file{
 	cursor: pointer;
+	position: relative;
 	background-color: #303030;
 	width: 200px;
 	padding: 10px;
@@ -183,6 +202,16 @@ a:link{
 	float: left;
 	height: 200px;
 	text-align: center;
+}
+
+.file .name{
+	position: absolute;
+	word-wrap: break-word;
+	margin-left: 10px;
+	margin-right: 10px;
+	bottom: 0;
+	right: 0;
+	left: 0;
 }
 
 .link{

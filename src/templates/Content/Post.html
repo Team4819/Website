@@ -9,7 +9,7 @@
     <br/>
     <br/>
     <div class='Author'><b>posted by {{post.author}}</b></div>
-    <p class='Date'>{{post.date}}</p>
+    <p class='date'>{{post.date}}</p>
 </div>
     
 <div id="newComment">
@@ -22,7 +22,7 @@
     {% if comments %}
     	{% for comment in comments %}
     <div class="comment">
-    <div><p><b class="author">{{comment.author}}</b> commented on {{comment.date}}</p></div>
+    <div><p><b class="author">{{comment.author}}</b> commented on <span class="date">{{comment.date}}</span></p></div>
     <div class="content"><p>{{comment.content}}</p></div>
     </div>
     	{% endfor %}

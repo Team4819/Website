@@ -14,7 +14,8 @@ class newFolder(webapp2.RequestHandler):
         else: restricted = False
         name = self.request.get("name")
         description = self.request.get("description")
-        media.newFolder(restricted, name, description)
+        date = datetime.datetime.strptime(self.request.get("date"), "%Y-%m-%d")
+        media.newFolder(restricted, name, description, date)
         
 app = webapp2.WSGIApplication([('/python/newFolder', newFolder)], debug=True)
  

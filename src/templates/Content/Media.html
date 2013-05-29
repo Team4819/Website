@@ -12,6 +12,7 @@ function newFolder(){
 	data = {};
 	data.name = $("#Name")[0].value;
 	data.description = $("#Description")[0].value;
+	data.date = $("#Date")[0].value;
 	if($("#Restricted")[0].checked == true) data.restricted = "true"
 	else data.restricted = "false"
 	$.post("/python/newFolder", data, newFolderCallback)
@@ -30,6 +31,7 @@ function newFolderCallback(data){
 <p>Name:<input type="text" id="Name"></p>
 <p>Description:</p><textarea id="Description" rows="5" cols="30"></textarea>
 <p>Restricted:<input type="checkbox" id="Restricted"></p>
+<p>Date:<input type="date" id="Date"></p>
 <button onclick="newFolder()">Create Folder</button>
 </div>
 {% endif %}
@@ -38,8 +40,8 @@ function newFolderCallback(data){
 {% for folder in folders %}
 <a style="text-decoration: none;color:white;" class="folder" onclick="navigate(event, this)" href="/Media/{{folder.name}}">
 <img alt="{{folder.description}}" src="{{folder.thumbnail}}">
-<p class="title">{{folder.name}}</p>
-<p class="date"> {{folder.date}}</p>
+<p class="name">{{folder.name}}</p>
+<p class="date"> {{folder.date.date}}</p>
 </a>
 {% endfor %}
 </div>

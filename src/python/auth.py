@@ -39,7 +39,6 @@ class invalidLogon(Exception):
 
 def authorize(key):
     keyhash = hashlib.md5(key).hexdigest()
-    logging.info(keyhash)
     try:
         user = db.GqlQuery("SELECT * "
                            "FROM User "
@@ -51,8 +50,6 @@ def authorize(key):
     return user
     
 def logIn(firstName, lastName, password):
-    logging.info("name = '%s'" % firstName + lastName)
-    logging.info(UserTable_key())
     try:
         user = db.GqlQuery("SELECT * "
                         "FROM User "
@@ -64,7 +61,6 @@ def logIn(firstName, lastName, password):
         raise(invalidLogon)
         
         
-    logging.info("user.passwordHash is: '" + user.passwordHash + "' password is: '" + password + "' hashlib.md5(password).hexdigest() is " + hashlib.md5(password).hexdigest())
     if (user.passwordHash != hashlib.md5(password).hexdigest()): raise(invalidLogon)
     
     key = id_generator(16)
@@ -81,5 +77,5 @@ def createUser(firstName, lastName, email, number, password):
     newuser.passwordHash = hashlib.md5(password).hexdigest()
     newuser.permissions = 1
     newuser.email = email
-    newuser.number = number
+    if(number != ""): newuser.number = number
     newuser.put()

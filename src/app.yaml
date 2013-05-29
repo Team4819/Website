@@ -6,9 +6,7 @@ threadsafe: yes
 
 handlers:
 
-  
-#- url: /static/.*
-#  script: serveMedia.app
+
     
 - url: /upload.py
   script: addImage.app
@@ -28,15 +26,17 @@ handlers:
 - url: /MainPage
   script: addpost.app
   
+- url: /favicon.ico
+  static_files: static/favicon.ico
+  upload: static/favicon.ico
+  
 - url: /static/media/(.*)
   script: python.media.app
   
 - url: /python/newFolder
   script: python.scripts.newFolder.app
   
-- url: /favicon.ico
-  static_files: static/favicon.ico
-  upload: static/favicon.ico
+
   
 - url: /python/login
   script: python.scripts.login.app
@@ -92,7 +92,6 @@ handlers:
   static_files: static/\1
   upload: static/(.*\.(bmp|gif|ico|jpeg|jpg|png))
   
-
 - url: /Pages/(.*)
   script: python.getPage.app
   
@@ -100,25 +99,11 @@ handlers:
   script: python.media.app
   
   
-  
 - url: /(.*)
   script: python.main.app
 
 - url: /
   script: python.main.app
-
-
-
-
-# index files
-#- url: /(.+)/
-#  static_files: static/\1/index.html
-#  upload: static/(.+)/index.html
-
-# redirect to 'url + /index.html' url.
-#- url: /(.+)
-#  static_files: static/redirector.html
-#  upload: static/redirector.html
 
 env_variables:
   DJANGO_SETTINGS_MODULE: 'settings'

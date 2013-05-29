@@ -51,8 +51,8 @@
             </div>
         </div>
         <div id="auth" >
-        {% if Username %}
-        	<img width="50" src="/static/Nav/id-card-md.png"  /><h3>Welcome, {{Username}}! </br> <a class="link" onclick="logout()">Log out.</a></h3>
+        {% if user.permissions != 0 %}
+        	<img width="50" src="/static/Nav/id-card-md.png"  /><h3>Welcome, {{user.firstName}}! <a class="link button" style="margin-left: auto; margin-right: auto; width: 100px;" onclick="logout()">Log out.</a></h3>
         {% else %}
             <a class="link" onclick="loginPage()"><img width="50" src="/static/Nav/id-card-md.png"  /><h3>Sign in</h3></a>
         {% endif %}

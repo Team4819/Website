@@ -4,7 +4,9 @@
 <div><p>Last Name:</p><input id="lastName" name="lastName"></input></div>
 <div><p>Password:</p><input id="Password" name="Password" type="password"></input></div>
 <div><p>Email:</p><input id="Email"  name="Email"></input></div>
-<div><p>Phone Number:</p><input id="Number"  name="Number"></input></div>
+<div><p>Phone Number:*</p><input id="Number"  name="Number"></input></div>
+<br/>
+<p>* currently unused/optional</p>
 </div>
 <a class="button" style="float: left; text-decoration: none; color: white;" href="/CreateUser" onclick="CreateUser(); return false;"><p>Create User</p></a>
 <p style="color: red;float: left;clear: both;" hidden="true" id="warning">One or more required fields missing.</p>
@@ -16,7 +18,7 @@ function CreateUser(){
  data.Password = $("#Password")[0].value;
  data.Email = $("#Email")[0].value;
  data.Number = $("#Number")[0].value;
- if(data.firstName != "" && data.lastName != "" && data.Password != "" && data.Email != "" && data.Number != "")
+ if(data.firstName != "" && data.lastName != "" && data.Password != "" && data.Email != "")
  $.post("/python/CreateUser",data,CreateUserCallback);
  else
  $("#warning")[0].hidden = false;

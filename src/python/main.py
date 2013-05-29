@@ -1,4 +1,3 @@
-import logging
 import webapp2
 import getPage
 import auth
@@ -13,25 +12,13 @@ class MainHandler(webapp2.RequestHandler):
         resource = str(resource)
         
         temp = loader.get_template("index.html")
-        
-        logging.info(self.request.cookies.get("LoginStatus"))
+        user = auth.publicUser
         
         if(self.request.cookies.get("LoginStatus") == "LoggedIn"):
-            
-            logging.info(self.request.cookies.get("authKey"))
-            
             user = auth.authorize(self.request.cookies.get("authKey"))
-            content = getPage.getPage(resource, user)
-            if (user): 
-                cont = Context({"content": content, "Username": user.firstName})
-            else:
-                cont = Context({"content": content})
-        else:
-            user = auth.publicUser
-            content = getPage.getPage(resource, user)
-            cont = Context({"content": content})
-            
-            
+        
+        content = getPage.getPage(resource, user)
+        cont = Context({"content": content, "user": user})            
         result = temp.render(cont)
         self.response.headers['Content-Type'] = "text/html"
         self.response.out.write(result)

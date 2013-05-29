@@ -62,7 +62,7 @@ function login(){
 function loginCallback(data){
 	if(data != "InvalidLogin"){
 		$("#auth").empty();
-		$("#auth").append("<img width='50' src='/static/Nav/id-card-md.png'  /><h3>Welcome, " + data  + "! </br> <a class='link' onclick='logout()'>Log out.</a></h3>");
+		$("#auth").append("<img width='50' src='/static/Nav/id-card-md.png'  /><h3>Welcome, " + data  + "! </br> <a class='link button' style='margin-left: auto; margin-right: auto; width: 100px;' onclick='logout()'>Log out.</a></h3>");
 		changePage("/About");
 	}
 	else{

@@ -6,6 +6,7 @@
 <img src="/static/file_icon_large.png">
 {% endif %}
 <h2>{{file.Name}}</h2>
+<div class="description">{{file.Description|safe}}</div>
 </div>
 
 <div style="float: left; clear: both; " class="button"><a href="/static/media/{{folder.Name}}/{{file.Name}}">Download</a></div>

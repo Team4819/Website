@@ -2,7 +2,7 @@ from django.template import Context,loader
 from google.appengine.ext import blobstore
 from .. import media
 import AccessDenied, PageNotFound
-import logging
+import logging, urllib
 
 def getPage(resource, user):
     split = str(resource).split("/")
@@ -21,7 +21,7 @@ def getPage(resource, user):
         if(folder.Restricted and user.permissions == 0): return AccessDenied.getPage(resource, user)
         files = media.getFiles(user.permissions == 0, folder)
         temp = loader.get_template("Folder.html")
-        url = blobstore.create_upload_url("/upload/media/%s" % split[1])
+        url = blobstore.create_upload_url(urllib.quote("/upload/media/" + split[1]))
         cont = Context({"files": files, "folder": folder, "user": user, "url": url})
         return temp.render(cont)
         
@@ -29,7 +29,7 @@ def getPage(resource, user):
         if(split[2] == "upload"):
             if(user.permissions < 2):  return AccessDenied.getPage(resource, user)
             temp = loader.get_template("upload.html")
-            url = blobstore.create_upload_url("/upload/media/%s" % split[1])
+            url = blobstore.create_upload_url(urllib.quote("/upload/media/" + split[1]))
             cont = Context({"url": url, "user": user, "folder": split[1]})
             return temp.render(cont)
         else:
