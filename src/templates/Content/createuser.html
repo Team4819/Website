@@ -1,5 +1,7 @@
 <h2>Create User</h2>
-<div class="panel" id="CreateUser">
+<div id="CreateUser">
+<div id="CreateUserPanel">
+<div class="panel" id="CreateUserPrompt">
 <div><p>First Name:</p><input id="firstName" name="firstName"></input></div>
 <div><p>Last Name:</p><input id="lastName" name="lastName"></input></div>
 <div><p>Password:</p><input id="Password" name="Password" type="password"></input></div>
@@ -10,6 +12,9 @@
 </div>
 <a class="button" style="float: left; text-decoration: none; color: white;" href="/CreateUser" onclick="CreateUser(); return false;"><p>Create User</p></a>
 <p style="color: red;float: left;clear: both;" hidden="true" id="warning">One or more required fields missing.</p>
+</div>
+<div id="CreatingUserPanel" class="panel" hidden="true"><p>Creating User...</p></div>
+</div>
 <script>
 function CreateUser(){
  var data = {};
@@ -18,8 +23,10 @@ function CreateUser(){
  data.Password = $("#Password")[0].value;
  data.Email = $("#Email")[0].value;
  data.Number = $("#Number")[0].value;
- if(data.firstName != "" && data.lastName != "" && data.Password != "" && data.Email != "")
+ if(data.firstName != "" && data.lastName != "" && data.Password != "" && data.Email != ""){
  $.post("/python/CreateUser",data,CreateUserCallback);
+ togglePanel('#CreateUser #CreatingUserPanel');
+ }
  else
  $("#warning")[0].hidden = false;
 }
@@ -28,5 +35,6 @@ function CreateUserCallback(data){
 		$("#auth").empty();
 		$("#auth").append("<img width='50' src='/static/Nav/id-card-md.png'  /><h3>Welcome, " + data  + "! </br> <a class='link' onclick='logout()'>Log out.</a></h3>");
 		changePage("/About");
+		LoggedIn = true;
 }
 </script>

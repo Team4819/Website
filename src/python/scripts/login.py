@@ -14,6 +14,7 @@ class Login(webapp2.RequestHandler):
             user = auth.authorize(authKey)
             self.response.set_cookie("authKey", authKey, 36000 , "/")
             self.response.set_cookie("LoginStatus", "LoggedIn", 36000 , "/")
+            self.response.set_cookie("Subscribed", str(user.subscribed), 36000 , "/")
             self.response.out.write(user.firstName)
         except auth.invalidLogon:
             self.response.set_cookie("loginStatus", "InvalidLogin", 36000 , "/")

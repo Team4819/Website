@@ -7,8 +7,9 @@ from django.template import loader, Context
 from pages import about, PageNotFound, teamUpdates, Media
 
 def getGenericPage(resource, user):
+    resource=str(urllib.unquote(resource))
     try:
-        temp = loader.get_template(resource + ".html")
+        temp = loader.get_template(resource.lower() + ".html")
         
     except template.TemplateDoesNotExist:
         return PageNotFound.getPage(resource)
@@ -36,11 +37,11 @@ def getReaderPage(resource, user):
     
 
             
-Pages = { "None": about.getPage, "Updates": teamUpdates.getPage, "Media": Media.getPage}
+Pages = { "none": about.getPage, "updates": teamUpdates.getPage, "media": Media.getPage}
 
 def getPage(resource, user):
-    resource=str(urllib.unquote(resource))
     split=resource.split("/")[0]
+    if(split != None): split = split.lower()
     try:
         result = Pages[split](resource, user)
     except KeyError: 
@@ -50,10 +51,12 @@ def getPage(resource, user):
         
 class getPageHandler(webapp2.RequestHandler):
         def get(self, resource):
-            resource=str(urllib.unquote(resource))
             if(self.request.cookies.get("LoginStatus") == "LoggedIn"):
                 user = auth.authorize(self.request.cookies.get("authKey"))
             else: user = auth.publicUser
+            
+            if(user.permissions == 0 and self.request.cookies.get("Subscribed") == "True"):
+                user.subscribed = True
             
             self.response.headers["Content-Type"] = "text/html"
             self.response.out.write(getPage(resource, user))

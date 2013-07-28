@@ -16,11 +16,16 @@ class User(db.Model):
     permissions = db.IntegerProperty()
     keyHash = db.StringProperty()
     email = db.EmailProperty()
+    subscribed = db.BooleanProperty()
     number = db.PhoneNumberProperty()
+    
+class publicSubscribed(db.Model):
+    email = db.EmailProperty()
     
 class publicUser(User):
     firstName = "Public"
     lastName = "User"
+    subscribed = False
     permissions = 0
     
 class authKey(db.Model):
@@ -47,6 +52,9 @@ def authorize(key):
                            UserTable_key(), keyhash)[0]
     except IndexError:
         user = publicUser
+    if(user.subscribed == None):
+        user.subscribed = False;
+        user.put();
     return user
     
 def logIn(firstName, lastName, password):
@@ -77,5 +85,39 @@ def createUser(firstName, lastName, email, number, password):
     newuser.passwordHash = hashlib.md5(password).hexdigest()
     newuser.permissions = 1
     newuser.email = email
+    pemail = findPublicEmail(email)
+    if(pemail.count() != 0):
+        pemail[0].delete();
+        newuser.subscribed = True;
+    else: newuser.subscribed = False;
     if(number != ""): newuser.number = number
     newuser.put()
+    
+def createPublicSubscribed(email):
+    uemails = db.GqlQuery('SELECT * '
+                       'FROM User '
+                       'WHERE ANCESTOR IS :1 AND email = :2',
+                       UserTable_key(), email)
+    pemails = findPublicEmail(email)
+    if(uemails.count() != 0 | pemails.count()): return
+    sub = publicSubscribed(parent=UserTable_key())
+    sub.email = email
+    sub.put()
+    
+def getSubscribed():
+    return db.GqlQuery('SELECT email '
+                                  'FROM User '
+                                  'WHERE ANCESTOR IS :1 AND subscribed = true ',
+                                  UserTable_key())
+def getPublicSubscribed():
+    return db.GqlQuery('SELECT email '
+                                         'FROM publicSubscribed '
+                                         'WHERE ANCESTOR IS :1 ',
+                                         UserTable_key())
+
+    
+def findPublicEmail(email):
+    return db.GqlQuery('SELECT * '
+                       'FROM publicSubscribed '
+                       'WHERE ANCESTOR IS :1 AND email = :2',
+                       UserTable_key(), email)

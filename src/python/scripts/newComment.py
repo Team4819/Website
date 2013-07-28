@@ -1,8 +1,7 @@
 import webapp2
 import datetime
 import logging
-from .. import auth
-from .. import posts
+from .. import auth, email, posts
 
 class newComment(webapp2.RequestHandler):
     def post(self):
@@ -17,6 +16,7 @@ class newComment(webapp2.RequestHandler):
         comment.put()
         post.comments += 1
         post.put();
+        email.mailToSubscribed(post)
         self.response.out.write('Commented Successfully')
             
         

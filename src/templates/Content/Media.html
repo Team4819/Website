@@ -24,15 +24,17 @@ function newFolderCallback(data){
 }
 
 </script>
-<div style="float: left;" onclick="openNewFolder()" class="button">
+<div style="float: left;" onclick="togglePanel('#newFolderPanel')" class="button">
 <h3>New Folder</h3>
 </div>
-<div class="panel" id="newFolder" hidden="true" >
+<div id="newFolder">
+<div class="panel" id="newFolderPanel" hidden="true" >
 <p>Name:<input type="text" id="Name"></p>
 <p>Description:</p><textarea id="Description" rows="5" cols="30"></textarea>
 <p>Restricted:<input type="checkbox" id="Restricted"></p>
 <p>Date:<input type="date" id="Date"></p>
 <button onclick="newFolder()">Create Folder</button>
+</div>
 </div>
 {% endif %}
 

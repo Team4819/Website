@@ -1,0 +1,8 @@
+<h2>Delete Post</h2>
+<p>Are you sure you want to delete \"{{post.title}}\"?</p>
+<a class="button" style="float: left;" onclick="sendDeletePost()">Delete</a>
+<script>
+function sendDeletePost(){
+	$.post("/python/deletePost", {"title":"{{post.title}}"},function (data){changePage("/Updates");} )
+}
+</script>

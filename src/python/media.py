@@ -15,6 +15,7 @@ from google.appengine.ext.webapp import blobstore_handlers
 class File(db.Model):
     Description = db.StringProperty(multiline=True)
     Key = db.StringProperty()
+    Html = db.TextProperty()
     Date = db.DateTimeProperty(auto_now_add=True)
     Name = db.StringProperty()
     Type = db.StringProperty()
@@ -99,6 +100,18 @@ def newFolder(restricted, name, description, date):
     folder.Description = description
     folder.Date = date
     folder.put()
+    
+class uploadHtml(webapp2.RequestHandler):
+    def post(self, resource):
+        resource = str(urllib.unquote(resource))
+        logging.info('resource is ' + resource)
+        nfile = File(parent=getFolder(resource)[0])
+        nfile.Name = self.request.get('title')
+        nfile.Html = self.request.get('html')
+        nfile.Type = 'html'
+        if(self.request.get("restricted")== "on"): nfile.Restricted = True
+        else: nfile.Restricted = False
+        nfile.put()
         
 class StaticHandler(blobstore_handlers.BlobstoreDownloadHandler):
     def get(self, resource):
@@ -152,4 +165,4 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
         self.redirect("/Media/" + resource)
         
 
-app = webapp2.WSGIApplication([('/static/media/(.+)?', StaticHandler),('/upload/media/(.+)?', UploadHandler)], debug=True)
+app = webapp2.WSGIApplication([('/static/media/(.+)?', StaticHandler),('/upload/media/(.+)?', UploadHandler), ('/upload/html/(.+)?', uploadHtml)], debug=True)

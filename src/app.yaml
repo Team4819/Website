@@ -56,6 +56,12 @@ handlers:
 - url: /python/newComment
   script: python.scripts.newComment.app
   
+- url: /python/subscribe
+  script: python.scripts.subscribe.app
+  
+- url: /python/deletePost
+  script: python.scripts.editPost.app
+  
   
 - url: /static/(.*\.css)
   mime_type: text/css
@@ -87,6 +93,9 @@ handlers:
   static_files: static/\1
   upload: static/(.*\.xml)
   
+- url: /_ah/mail/mailingList@firstteam4819.appspotmail.com
+  script: email.app
+  
 # image files
 - url: /static/(.*\.(bmp|gif|ico|jpeg|jpg|png))
   static_files: static/\1
@@ -107,6 +116,9 @@ handlers:
 
 env_variables:
   DJANGO_SETTINGS_MODULE: 'settings'
+  
+inbound_services:
+- mail
 
 libraries:
 - name: webapp2

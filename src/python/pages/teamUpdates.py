@@ -21,8 +21,9 @@ EST = Zone(-5,False,'EST')
 
 def getPage(resource, user):
     split = str(resource).split('/')
+    resource=str(urllib.unquote(resource))
     if(len(split) == 1):
-        temp = loader.get_template("Updates.html")
+        temp = loader.get_template("updates.html")
         updates =  posts.getRecentPosts((user.permissions < 1))
         if(updates.count() > 0):
 #            result = []
@@ -31,12 +32,12 @@ def getPage(resource, user):
             cont = Context({"updates": updates, "user": user})
         else:
             cont = Context({"user": user})
-        result = temp.render(cont)
+        result = temp.render(cont).encode('utf-8')
         return result
     
     elif(split[1] == "New"):
         if(user.permissions >= 2):
-            temp = loader.get_template("NewPost.html")
+            temp = loader.get_template("newpost.html")
             cont = Context({"user": user})
             result = temp.render(cont)
             return result
@@ -47,10 +48,11 @@ def getPage(resource, user):
     elif(split[1] != "New"):
         
         if(len(split) == 2):
-            temp = loader.get_template("Post.html")
+            temp = loader.get_template("post.html")
             logging.info("single page post")
             try:
                 title = urllib.unquote(split[1].encode('ascii')).decode('utf-8')
+                logging.info(title)
                 post = posts.getPost(title)
                 if(user.permissions < 1 & post.restricted): return AccessDenied.getPage(resource, user)
                 comments = posts.getComments(post)
@@ -65,7 +67,22 @@ def getPage(resource, user):
             try:
                 title = urllib.unquote(split[1].encode('ascii')).decode('utf-8')
                 post = posts.getPost(title)
-                temp = loader.get_template("editPost.html")
+                if(post.author != user.firstName+" "+user.lastName and user.permissions < 3):
+                    return AccessDenied.getPage(resource, user)
+                temp = loader.get_template("editpost.html")
+                cont = Context({"post": post, "user": user})
+                return temp.render(cont)
+            except IndexError:
+                return PageNotFound.getPage(resource)
+            
+        elif(split[2] == "Delete"):
+            if(user.permissions < 2): return AccessDenied.getPage(resource, user)
+            try:
+                title = urllib.unquote(split[1].encode('ascii')).decode('utf-8')
+                post = posts.getPost(title)
+                if(post.author != user.firstName+" "+user.lastName and user.permissions < 3):
+                    return AccessDenied.getPage(resource, user)
+                temp = loader.get_template("deletepost.html")
                 cont = Context({"post": post, "user": user})
                 return temp.render(cont)
             except IndexError:

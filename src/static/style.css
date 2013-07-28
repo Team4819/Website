@@ -224,6 +224,7 @@ a:link{
 }
 
 #SponsorsBar{
+	clear: both;
     text-align: center;
     margin-top: 75px;
 }

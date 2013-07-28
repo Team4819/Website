@@ -16,7 +16,8 @@ class MainHandler(webapp2.RequestHandler):
         
         if(self.request.cookies.get("LoginStatus") == "LoggedIn"):
             user = auth.authorize(self.request.cookies.get("authKey"))
-        
+        if( user.permissions == 0 and self.request.cookies.get("Subscribed") == "True"):
+            user.subscribed = True
         content = getPage.getPage(resource, user)
         cont = Context({"content": content, "user": user})            
         result = temp.render(cont)

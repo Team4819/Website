@@ -69,3 +69,14 @@ indexes:
   - name: tags
   - name: date
     direction: desc
+
+- kind: User
+  ancestor: yes
+  properties:
+  - name: subscribed
+  - name: email
+
+- kind: publicSubscribed
+  ancestor: yes
+  properties:
+  - name: email

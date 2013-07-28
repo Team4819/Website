@@ -1,8 +1,7 @@
 import webapp2
 import datetime
 import logging
-from .. import auth
-from .. import posts
+from .. import auth, posts, email
 
 class newPost(webapp2.RequestHandler):
     def post(self):
@@ -21,6 +20,7 @@ class newPost(webapp2.RequestHandler):
         newpost.tags = ["all"]
         newpost.comments = 0
         newpost.put()
+        email.mailToSubscribed(newpost)
         self.response.out.write('Posted Successfully')
             
         

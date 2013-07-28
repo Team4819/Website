@@ -1,20 +1,27 @@
 <h1>Edit Post</h1>
+<div id="editPost" class="panel" style="width:100%;">
+<div id="editPostPanel">
 <script src="/static/ckeditor/ckeditor.js"></script>
 <p>Title <input type="text" id="title" value="{{post.title}}"> Restricted<input type="checkbox" id="restricted"> <button onclick="Post()" id="postButton">Save</button></p>
 <textarea id="editor">{{post.content|safe}}</textarea>
-
+</div>
+<div id="editingPost" hidden="true">
+<p>Submitting...</p>
+</div>
+</div>
 <script>
 CKEDITOR.replace('editor');
 $("#restricted")[0].checked = {% if post.restricted %}true{% else %}false{% endif %};
 
 function Post(){
 data = {}
-data.oldTitle = "{{post.title}}"
+data.oldTitle = "{{post.title|safe}}"
 data.title = $("#title")[0].value
 data.content = CKEDITOR.instances.editor.getData();
 if($('#restricted')[0].checked)data.restricted = true;
 else data.restricted = false;
 $.post('/python/editPost', data, PostCallback)
+togglePanel("#editPost #editingPost")
 }
 
 function PostCallback(data){

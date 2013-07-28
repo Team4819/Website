@@ -21,6 +21,17 @@ class editPost(webapp2.RequestHandler):
         post.tags = ["all"]
         post.put()
         self.response.out.write('Edited Successfully')
+        
+class deletePost(webapp2.RequestHandler):
+    def post(self):
+        if(self.request.cookies.get("LoginStatus") == "LoggedIn"):
+            user = auth.authorize(self.request.cookies.get("authKey"))
+        else: user = auth.publicUser
+        post = posts.getPost(self.request.get('title'))
+        if( post.author != user.firstName + " " + user.lastName and user.permissions < 3): return
+        post.delete()
+        self.response.out.write("Deleted Successfully")
+        
             
         
-app = webapp2.WSGIApplication([('/python/editPost', editPost)], debug=True)
+app = webapp2.WSGIApplication([('/python/editPost', editPost),('/python/deletePost', deletePost)], debug=True)

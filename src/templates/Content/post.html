@@ -1,6 +1,9 @@
-    {% if user.permissions >= 2 %}
-    <a class="button" style="float: left;" onclick="navigate(event, this)"  href="/Updates/{{post.title|urlencode}}/Edit">
+    {% if user.permissions == 3 or user.firstName|add:" "|add:user.lastName = post.author %}
+    <a class="button" style="float: left; clear: none;" onclick="navigate(event, this)"  href="/Updates/{{post.title|urlencode:""}}/Edit">
     Edit Post
+    </a>
+    <a class="button" style="float: left; clear: none;" onclick="navigate(event, this)"  href="/Updates/{{post.title|urlencode:""}}/Delete">
+    Delete Post
     </a>
     {% endif %}
 <div class="post">
@@ -11,12 +14,17 @@
     <div class='Author'><b>posted by {{post.author}}</b></div>
     <p class='date'>{{post.date}}</p>
 </div>
-    
+
 <div id="newComment">
+<div id="newCommentPrompt">
 <h3>Comment with your thoughts:</h3>
 <div><input type="text" id="author" value="{{user.firstName}} {{user.lastName}}"></div>
 <div><textarea id="content"></textarea></div>
 <div><button onclick="comment()">Comment</button></div>
+</div>
+<div id="commenting" hidden="true">
+<p>Commenting...</p>
+</div>
 </div>
 <div id="comments">
     {% if comments %}
@@ -42,6 +50,7 @@ function comment(){
 	data.author = $("#author")[0].value
 	data.content = $("#content")[0].value
 	$.post("/python/newComment", data, commentCallback)
+	togglePanel("#newComment #commenting")
 }
 function commentCallback(data){
 	reloadContent();

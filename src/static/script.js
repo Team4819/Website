@@ -7,14 +7,20 @@ function reloadContent(){
 }
 
 function load() {
+	ourl = window.location.pathname
+	LoggedIn = ($.cookie("LoginStatus")=="LoggedIn")
 	$(window).bind('popstate', function(event) {
-	    url = window.location.pathname;
-	    if (url == '/') {
-	        url = '/About'
-	    }
-	    $.get("/Pages"+url,fillContent);
+	    nurl = window.location.pathname;
+	    if(nurl != ourl){
+		    if (nurl == '/') {
+		        nurl = '/About'
+		    }
+	    $.get("/Pages"+nurl,fillContent);
 	    _gaq.push(['_trackPageview']);
+	    }
+	    ourl = nurl
 	});
+	
 }
 
 function navigate(e, target){
@@ -29,9 +35,11 @@ function fillContent(data) {
     
 }
 
-function fillNews(data) {
-    $("#Posts").append(data);
-
+function togglePanel(panelRefrence){
+	var panels = $(panelRefrence).siblings()
+	for(var i = 0; i < panels.length; i++)
+		panels[i].hidden = true
+	$(panelRefrence)[0].hidden = !$(panelRefrence)[0].hidden
 }
 
 function changePage(path) {
@@ -44,9 +52,6 @@ function changePage(path) {
     _gaq.push(['_trackPageview']);
 }
 
-function loginPage(){
-	changePage("/Login")
-}
 
 function login(){
 	var data = {};
@@ -54,31 +59,40 @@ function login(){
 	data.lastName = $("#lastName")[0].value;
 	data.Password= $("#Password")[0].value;
 	$.post("/python/login",data,loginCallback);
-	username = data.firstName
-	$("#login").empty();
-	$("#login").append("<p>logging in</p>");
+	togglePanel("#login #loggingInPanel");
+
 }
 
 function loginCallback(data){
 	if(data != "InvalidLogin"){
-		$("#auth").empty();
-		$("#auth").append("<img width='50' src='/static/Nav/id-card-md.png'  /><h3>Welcome, " + data  + "! </br> <a class='link button' style='margin-left: auto; margin-right: auto; width: 100px;' onclick='logout()'>Log out.</a></h3>");
+		togglePanel("#auth #welcome");
+		$(".username").empty();
+		$(".username").append(data);
 		changePage("/About");
+		if($.cookie("Subscribed")=="True")
+			togglePanel("#SubscribedPanel")
+		else togglePanel("#SubscribePanel")
+		LoggedIn = true;
 	}
 	else{
-		$("#login").empty();
-		$("#login").append('<div id="login"><div><p>First Name:</p><input id="firstName" name="firstName"></input></div><div><p>Last Name:</p><input id="lastName" name="lastName"></input></div><div><p>Password:</p><input id="Password" name="Password" type="password"></input></div></div><p style="color: red;">invalid login</p>');
-	}
+		togglePanel("#login #loginPanel");
+		$("#invalidLogin")[0].hidden=false;
+		}
 }
 
 function logout(){
-	$.get("/python/logout", {} , logoutCallback)
-	$("#auth").empty();
-	$("#auth").append("<h3>Logging Out</h3>");
+	$.get("/python/logout", {} , logoutCallback);
+	togglePanel("#auth #loggingOut");
 }
 
 function logoutCallback(data){
-	$("#auth").empty();
-	$("#auth").append('<a class="link" onclick="loginPage()"><img width="50" src="/static/Nav/id-card-md.png"  /><h3>Sign in</h3></a>');
+	togglePanel("#auth #login")
+	togglePanel("#SubscribePanel")
+	LoggedIn = false;
 	reloadContent();
+}
+
+function submitSubscribe(){
+	var data = {"email": $("#Subscribe #email")[0].value};
+	$.get("/python/subscribe", data, function(data){togglePanel("#SubscribedPanel")});
 }

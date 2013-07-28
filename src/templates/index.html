@@ -8,6 +8,7 @@
     <script src="/static/jquery-1.9.1.min.js"></script>
     <script src="/static/script.js"></script>
     <script src="/static/jquery.form.js"></script>
+    <script src="/static/jquery.cookie.js"></script>
     <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -51,11 +52,26 @@
             </div>
         </div>
         <div id="auth" >
-        {% if user.permissions != 0 %}
-        	<img width="50" src="/static/Nav/id-card-md.png"  /><h3>Welcome, {{user.firstName}}! <a class="link button" style="margin-left: auto; margin-right: auto; width: 100px;" onclick="logout()">Log out.</a></h3>
-        {% else %}
-            <a class="link" onclick="loginPage()"><img width="50" src="/static/Nav/id-card-md.png"  /><h3>Sign in</h3></a>
-        {% endif %}
+            <div id="welcome" {% if user.permissions == 0 %}hidden="true"{% endif %}>
+               <img width="50" src="/static/Nav/id-card-md.png"  /><h3>Welcome, <span class="username">{{user.firstName}}</span>! <a class="link button" style="margin-left: auto; margin-right: auto; width: 100px;" onclick="logout()">Log out.</a></h3>
+            </div>
+            <div id="login" {% if user.permissions != 0 %}hidden="true"{% endif %}>
+               <a class="link" href="/Login" onclick="navigate(event, this)"><img width="50" src="/static/Nav/id-card-md.png"  /><h3>Sign in</h3></a>
+            </div>
+            <div id="loggingOut" hidden="true"><p>Logging Out</p></div>
+        </div>
+        <div id="Subscribe">
+           <div id="SubscribePanel" {% if user.subscribed == 1 %}hidden="true"{% endif %}>
+              <a class="link button" style="margin-left: auto; margin-right: auto; width: 150px; text-align: center;" onclick="if(LoggedIn)submitSubscribe(); else togglePanel('#Subscribe #SubscribePromptPanel')">Subscribe to Mailing List</a>
+              
+           </div>
+           <div id="SubscribePromptPanel" hidden="true">
+              <p>Email:<input id="email"></p>
+                 <a class="link button" style="margin-left: auto; margin-right: auto; width: 150px; text-align: center;" onclick="submitSubscribe()">Subscribe</a>
+           </div>
+           <div id="SubscribedPanel" {% if user.subscribed == 0 %}hidden="true"{% endif %}>
+              <a class="panel" style="	float: none; padding: 10px; margin: 10px; display: block; clear: both; margin-left: auto; margin-right: auto; width: 150px; text-align: center;">You are subscribed to the Mailing List.</a>
+           </div>
         </div>
         <div id="SponsorsBar">
             <h2>Our Proud Sponsors</h2>
