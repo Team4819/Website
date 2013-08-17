@@ -19,25 +19,25 @@ def getGenericPage(resource, user):
 
 def getAdminPage(resource, user):
     if(user.permissions < 3):
-        return getGenericPage('accessDenied', user)
+        return getGenericPage('accessdenied', user)
     else:
         return getGenericPage(resource, user)
     
 def getWriterPage(resource, user):
     if(user.permissions < 2):
-        return getGenericPage('accessDenied', user)
+        return getGenericPage('accessdenied', user)
     else:
         return getGenericPage(resource, user)
     
 def getReaderPage(resource, user):
     if(user.permissions < 1):
-        return getGenericPage('accessDenied', user)
+        return getGenericPage('accessdenied', user)
     else:
         return getGenericPage(resource, user)
     
 
             
-Pages = { "none": about.getPage, "updates": teamUpdates.getPage, "media": Media.getPage}
+Pages = { "none": about.getPage, "updates": teamUpdates.getPage, "media": Media.getPage, "calendar": getReaderPage}
 
 def getPage(resource, user):
     split=resource.split("/")[0]

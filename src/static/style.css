@@ -52,11 +52,10 @@ a:link{
 #Navigation{
    float: left;
    width:  70%;
-   margin-left: 5%;
 }
 
 #Navigation>a{
-    width: 14%;
+    width: 12%;
     float: left;
     text-align: center;
     text-decoration: none;
