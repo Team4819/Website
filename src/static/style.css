@@ -39,6 +39,10 @@ a:link{
     color: #FF2945;
 }
 
+.hot{
+	color: red;
+}
+
 #teamUpdates{
 	clear: both
 }
@@ -50,12 +54,13 @@ a:link{
 
 
 #Navigation{
-   float: left;
+   display: inline-block;
+	text-align: center;
    width:  70%;
 }
 
 #Navigation>a{
-    width: 12%;
+    width: 14%;
     float: left;
     text-align: center;
     text-decoration: none;
@@ -144,7 +149,7 @@ a:link{
     background-color: #303030;
 }
 
-#banner{
+.banner{
     background-color: #303030;
     margin-top: 0px;
     padding-top: 0px;
@@ -245,6 +250,7 @@ a:link{
 #Content{
     float: left;
     width: 70%;
+    margin-top: -25px;
 }
 
 #footer{

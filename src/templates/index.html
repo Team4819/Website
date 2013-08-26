@@ -4,11 +4,13 @@
 <head>
     <title>Team 4819</title>
     <link rel="stylesheet" href="/static/style.css" type="text/css"/>
+    <link rel="stylesheet" href="/static/jquery.countdown.css" type="text/css"/>
     <meta name="Description" content="Team 4819, The Flat Mountain Mechanics, is a FIRST FRC team based in Mt. Pleasant Michigan">
     <script src="/static/jquery-1.9.1.min.js"></script>
     <script src="/static/script.js"></script>
     <script src="/static/jquery.form.js"></script>
     <script src="/static/jquery.cookie.js"></script>
+    <script src="/static/jquery.countdown.js"></script>
     <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -18,7 +20,9 @@
   (function() {
     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    var s = document.getElementsByTagName('script')[0]; 
+    s.parentNode.insertBefore(ga, s);
+
   })();
   </script>
 </head>
@@ -26,7 +30,9 @@
 <body>
 <div id="Header">
     <div id="Logo">
-        <img onclick="changePage('/About')" src="/static/Logo/Logo-large.png" width="200px"/>
+    	<a class="link" href="/Home" onclick="navigate(event, this)">
+        	<img src="/static/Logo/Logo-large.png" width="200px"/>
+        </a>
     </div>
     <div id="Navigation">
         <a class="navLink1 link" onclick="navigate(event, this)" href="/About"><img src="/static/Nav/about.png"/><h2>About Us</h2></a>
@@ -36,8 +42,10 @@
         <a class="navLink1 link" onclick="navigate(event, this)" href="/Awards"><img src="/static/Nav/cup.png"/><h2>Awards</h2></a>
         <a class="navLink2 link" onclick="navigate(event, this)" href="/Sponsors"><img style='width: 25px;' src="/static/Nav/dollar-sign.png"/><h2>Sponsors</h2></a>
         <a class="navLink1 link" onclick="navigate(event, this)" href="/Code"><img src="/static/Nav/html-bracket.png"/><h2>Code</h2></a>
-        <a class="navLink2 link" onclick="navigate(event, this)" href="/Calendar"><img src="/static/Nav/office-calendar.png"/><h2>Calendar</h2></a>
+      <!--  <a class="navLink2 link" onclick="navigate(event, this)" href="/Calendar"><img src="/static/Nav/office-calendar.png"/><h2>Calendar</h2></a>-->
     </div>
+    <hr/>
+
 </div>
 <div id="Body">
     <div id="Sidebar">

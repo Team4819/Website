@@ -7,13 +7,15 @@ function reloadContent(){
 }
 
 function load() {
+	
 	ourl = window.location.pathname
 	LoggedIn = ($.cookie("LoginStatus")=="LoggedIn")
 	$(window).bind('popstate', function(event) {
 	    nurl = window.location.pathname;
+	    console.log("ourl=" + ourl + " nurl=" + nurl);
 	    if(nurl != ourl){
 		    if (nurl == '/') {
-		        nurl = '/About'
+		        nurl = '/Home'
 		    }
 	    $.get("/Pages"+nurl,fillContent);
 	    _gaq.push(['_trackPageview']);
@@ -43,12 +45,14 @@ function togglePanel(panelRefrence){
 }
 
 function changePage(path) {
+	console.log("changing to " + path)
     $.get("/Pages"+path,fillContent);
     url = window.location.pathname;
     if (url == '/') {
-        url = '/About'
+        url = '/Home'
     }
     history.pushState({"path": url},"",path);
+    ourl = path;
     _gaq.push(['_trackPageview']);
 }
 
@@ -68,11 +72,12 @@ function loginCallback(data){
 		togglePanel("#auth #welcome");
 		$(".username").empty();
 		$(".username").append(data);
-		changePage("/About");
+		changePage("/Home");
 		if($.cookie("Subscribed")=="True")
 			togglePanel("#SubscribedPanel")
 		else togglePanel("#SubscribePanel")
 		LoggedIn = true;
+		_gaq.push(['_trackEvent', 'Authentication', 'Login', data]);
 	}
 	else{
 		togglePanel("#login #loginPanel");
@@ -89,6 +94,7 @@ function logoutCallback(data){
 	togglePanel("#auth #login")
 	togglePanel("#SubscribePanel")
 	LoggedIn = false;
+	_gaq.push(['_trackEvent', 'Authentication', 'Logout']);
 	reloadContent();
 }
 
