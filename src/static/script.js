@@ -38,10 +38,11 @@ function fillContent(data) {
 }
 
 function togglePanel(panelRefrence){
-	var panels = $(panelRefrence).siblings()
-	for(var i = 0; i < panels.length; i++)
-		panels[i].hidden = true
-	$(panelRefrence)[0].hidden = !$(panelRefrence)[0].hidden
+	var panels = $(panelRefrence).siblings().attr("hidden","true");
+	if($(panelRefrence).attr("hidden") == "undefined") 
+		$(panelRefrence).attr("hidden", "true");
+	else 	
+		$(panelRefrence).removeAttr("hidden")
 }
 
 function changePage(path) {
@@ -81,7 +82,7 @@ function loginCallback(data){
 	}
 	else{
 		togglePanel("#login #loginPanel");
-		$("#invalidLogin")[0].hidden=false;
+		$("#invalidLogin").removeAttr("hidden");
 		}
 }
 

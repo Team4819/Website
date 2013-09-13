@@ -16,4 +16,6 @@
 {% endif %}
 </div>
 
+{% if file.Type != "html" %}
 <div style="float: left; clear: both; " class="button"><a href="/static/media/{{folder.Name}}/{{file.Name}}">Download</a></div>
+{% endif %}

@@ -60,7 +60,7 @@ a:link{
 }
 
 #Navigation>a{
-    width: 14%;
+    width: 12%;
     float: left;
     text-align: center;
     text-decoration: none;
@@ -250,7 +250,7 @@ a:link{
 #Content{
     float: left;
     width: 70%;
-    margin-top: -25px;
+    margin-top: -25 px;
 }
 
 #footer{
@@ -260,3 +260,6 @@ a:link{
     margin: 0px;    
 }
 
+
+
+*[hidden] {display: none;}
