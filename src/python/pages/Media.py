@@ -4,6 +4,7 @@ from .. import media
 import AccessDenied, PageNotFound
 import logging, urllib
 
+
 def getPage(resource, user):
     split = str(resource).split("/")
     if(len(split) == 1):
@@ -17,7 +18,7 @@ def getPage(resource, user):
         cont = Context({"folders": result, "user": user})
         return temp.render(cont)
     elif(len(split) == 2):
-        folder = media.getFolder(split[1])[0]
+        folder = media.getFolder(urllib.unquote(split[1]))[0]
         if(folder.Restricted and user.permissions == 0): return AccessDenied.getPage(resource, user)
         files = media.getFiles(user.permissions == 0, folder)
         temp = loader.get_template("Folder.html")
@@ -29,14 +30,14 @@ def getPage(resource, user):
         if(split[2] == "upload"):
             if(user.permissions < 2):  return AccessDenied.getPage(resource, user)
             temp = loader.get_template("upload.html")
-            url = blobstore.create_upload_url(urllib.quote("/upload/media/" + split[1]))
-            cont = Context({"url": url, "user": user, "folder": split[1]})
+            url = blobstore.create_upload_url(urllib.quote("/upload/media/" + urllib.unquote(split[1])))
+            cont = Context({"url": url, "user": user, "folder": urllib.unquote(split[1])})
             return temp.render(cont)
         else:
             try:
-                folder = media.getFolder(split[1])[0]
+                folder = media.getFolder(urllib.unquote(split[1]))[0]
                 if(folder.Restricted and user.permissions == 0): return AccessDenied.getPage(resource, user)
-                f = media.getFile(split[2], folder)
+                f = media.getFile(urllib.unquote(split[2]), folder)
                 if(f.Restricted and user.permissions == 0): return AccessDenied.getPage(resource, user)
                 temp = loader.get_template("file.html")
                 cont = Context({"file": f, "folder": folder, "user": user})

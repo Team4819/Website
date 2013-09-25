@@ -40,7 +40,7 @@ function newFolderCallback(data){
 
 <div id="folders" >
 {% for folder in folders %}
-<a style="text-decoration: none;color:white;" class="folder" onclick="navigate(event, this)" href="/Media/{{folder.name}}">
+<a style="text-decoration: none;color:white;" class="folder" onclick="navigate(event, this)" href="/Media/{{folder.name|urlencode:''}}">
 <img alt="{{folder.description}}" src="{{folder.thumbnail}}">
 <p class="name">{{folder.name}}</p>
 <p class="date"> {{folder.date.date}}</p>
