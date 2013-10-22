@@ -17,6 +17,7 @@ function Post(){
 data = {}
 data.oldTitle = "{{post.title|safe}}"
 data.title = $("#title")[0].value
+data.date = "{{post.date.date|urlencode:""}}"
 data.content = CKEDITOR.instances.editor.getData();
 if($('#restricted')[0].checked)data.restricted = true;
 else data.restricted = false;

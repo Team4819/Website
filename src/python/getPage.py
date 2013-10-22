@@ -6,46 +6,46 @@ from django import template
 from django.template import loader, Context
 from pages import about, PageNotFound, teamUpdates, Media
 
-def getGenericPage(resource, user):
+def getGenericPage(request, resource, user):
     resource=str(urllib.unquote(resource))
     try:
         temp = loader.get_template(resource.lower() + ".html")
         
     except template.TemplateDoesNotExist:
-        return PageNotFound.getPage(resource)
+        return PageNotFound.getPage(request, resource)
         
     cont = Context({"user": user}) 
     return temp.render(cont) 
 
-def getAdminPage(resource, user):
+def getAdminPage(request, resource, user):
     if(user.permissions < 3):
-        return getGenericPage('accessdenied', user)
+        return getGenericPage(request, 'accessdenied', user)
     else:
-        return getGenericPage(resource, user)
+        return getGenericPage(request, resource, user)
     
-def getWriterPage(resource, user):
+def getWriterPage(request, resource, user):
     if(user.permissions < 2):
-        return getGenericPage('accessdenied', user)
+        return getGenericPage(request, 'accessdenied', user)
     else:
-        return getGenericPage(resource, user)
+        return getGenericPage(request, resource, user)
     
-def getReaderPage(resource, user):
+def getReaderPage(request, resource, user):
     if(user.permissions < 1):
-        return getGenericPage('accessdenied', user)
+        return getGenericPage(request, 'accessdenied', user)
     else:
-        return getGenericPage(resource, user)
+        return getGenericPage(request, resource, user)
     
 
             
 Pages = { "none": about.getPage, "updates": teamUpdates.getPage, "media": Media.getPage, "calendar": getReaderPage}
 
-def getPage(resource, user):
+def getPage(request, resource, user):
     split=resource.split("/")[0]
     if(split != None): split = split.lower()
     try:
-        result = Pages[split](resource, user)
+        result = Pages[split](request, resource, user)
     except KeyError: 
-        result = getGenericPage(resource, user)
+        result = getGenericPage(request, resource, user)
     
     return result
         
@@ -59,7 +59,7 @@ class getPageHandler(webapp2.RequestHandler):
                 user.subscribed = True
             
             self.response.headers["Content-Type"] = "text/html"
-            self.response.out.write(getPage(resource, user))
+            self.response.out.write(getPage(self, resource, user))
             
 
 app = webapp2.WSGIApplication([('/Pages/(.+)?', getPageHandler)], debug=True)

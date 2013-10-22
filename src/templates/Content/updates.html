@@ -8,11 +8,11 @@
     {% if updates %}
     {% for post in updates %}
     <div class="post">
-    <a style="text-decoration: none; color: white;" onclick="navigate(event, this)" href="/Updates/{{post.title|urlencode:""}}"><h3>{{post.title}}</h3></a>
+    <a style="text-decoration: none; color: white;" onclick="navigate(event, this)" href="/Updates/{{post.date.date|urlencode:""}}/{{post.title|urlencode:""}}"><h3>{{post.title}}</h3></a>
     <div class='Content'>{{post.content|safe}}</div>
     <br/>
     <br/>
-    <a onclick="navigate(event, this)" href="/Updates/{{post.title|urlencode:""}}">{{post.comments}} comments</a>
+    <a onclick="navigate(event, this)" href="/Updates/{{post.date.date|urlencode:""}}/{{post.title|urlencode:""}}">{{post.comments}} comments</a>
     <br/>
     <p class='Author'><b>posted by {{post.author}}</b></p>
     <p class='date'>{{post.date}}</p>

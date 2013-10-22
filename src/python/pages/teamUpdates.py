@@ -2,7 +2,7 @@ from django.template import Context,loader
 from .. import posts
 import AccessDenied, PageNotFound, logging
 import urllib
-from datetime import datetime,tzinfo,timedelta
+from datetime import datetime,tzinfo,timedelta,time
 
 class Zone(tzinfo):
     def __init__(self,offset,isdst,name):
@@ -19,12 +19,15 @@ class Zone(tzinfo):
 GMT = Zone(0,False,'GMT')
 EST = Zone(-5,False,'EST')
 
-def getPage(resource, user):
+def getPage(request, resource, user):
     split = str(resource).split('/')
     resource=str(urllib.unquote(resource))
     if(len(split) == 1):
         temp = loader.get_template("updates.html")
-        updates =  posts.getRecentPosts((user.permissions < 1))
+        date = request.request.get("getBefore");
+        if(date == ""):date = datetime.now();
+        else: date = time.strptime(date, "%Y-%m-%d")
+        updates =  posts.getPostsBefore(date.date ,(user.permissions < 1))
         if(updates.count() > 0):
 #            result = []
 #            for update in updates:
@@ -47,13 +50,30 @@ def getPage(resource, user):
 
     elif(split[1] != "New"):
         
-        if(len(split) == 2):
-            temp = loader.get_template("post.html")
-            logging.info("single page post")
+
+            
+        if(split[1] == "Page"):
+            temp = loader.get_template("updates.html")
             try:
-                title = urllib.unquote(split[1].encode('ascii')).decode('utf-8')
+                page = split[2]
+                print("page");
+                updates = posts.getPostsOnPage(page, user.permissions < 1)
+                if(updates.count() > 0):
+                    cont = Context({"updates": updates, "user": user})
+                else:
+                    cont = Context({"user": user})
+                result = temp.render(cont).encode('utf-8')
+                return result
+            except IndexError:
+                return PageNotFound.getPage(resource)  
+            
+        elif(len(split) == 3):
+            temp = loader.get_template("post.html");
+            try:
+                title = urllib.unquote(split[2].encode('ascii')).decode('utf-8')
+                date = urllib.unquote(split[1].encode('ascii')).decode('utf-8')
                 logging.info(title)
-                post = posts.getPost(title)
+                post = posts.getPost(title, date);
                 if(user.permissions < 1 & post.restricted): return AccessDenied.getPage(resource, user)
                 comments = posts.getComments(post)
                 if(comments.count() == 0): comments = None
@@ -62,11 +82,12 @@ def getPage(resource, user):
             except IndexError:
                 return PageNotFound.getPage(resource)
             
-        elif(split[2] == "Edit"):
+        elif(split[3] == "Edit"):
             if(user.permissions < 2): return AccessDenied.getPage(resource, user)
             try:
-                title = urllib.unquote(split[1].encode('ascii')).decode('utf-8')
-                post = posts.getPost(title)
+                title = urllib.unquote(split[2].encode('ascii')).decode('utf-8')
+                date = urllib.unquote(split[1].encode('ascii')).decode('utf-8')
+                post = posts.getPost(title, date);
                 if(post.author != user.firstName+" "+user.lastName and user.permissions < 3):
                     return AccessDenied.getPage(resource, user)
                 temp = loader.get_template("editpost.html")
@@ -75,11 +96,12 @@ def getPage(resource, user):
             except IndexError:
                 return PageNotFound.getPage(resource)
             
-        elif(split[2] == "Delete"):
+        elif(split[3] == "Delete"):
             if(user.permissions < 2): return AccessDenied.getPage(resource, user)
             try:
-                title = urllib.unquote(split[1].encode('ascii')).decode('utf-8')
-                post = posts.getPost(title)
+                title = urllib.unquote(split[2].encode('ascii')).decode('utf-8')
+                date = urllib.unquote(split[1].encode('ascii')).decode('utf-8')
+                post = posts.getPost(title, date);
                 if(post.author != user.firstName+" "+user.lastName and user.permissions < 3):
                     return AccessDenied.getPage(resource, user)
                 temp = loader.get_template("deletepost.html")
@@ -88,3 +110,4 @@ def getPage(resource, user):
             except IndexError:
                 return PageNotFound.getPage(resource)
         
+

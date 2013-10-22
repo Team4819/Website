@@ -1,8 +1,8 @@
     {% if user.permissions == 3 or user.firstName|add:" "|add:user.lastName = post.author %}
-    <a class="button" style="float: left; clear: none;" onclick="navigate(event, this)"  href="/Updates/{{post.title|urlencode:""}}/Edit">
+    <a class="button" style="float: left; clear: none;" onclick="navigate(event, this)"  href="/Updates/{{post.date.date|urlencode:""}}/{{post.title|urlencode:""}}/Edit">
     Edit Post
     </a>
-    <a class="button" style="float: left; clear: none;" onclick="navigate(event, this)"  href="/Updates/{{post.title|urlencode:""}}/Delete">
+    <a class="button" style="float: left; clear: none;" onclick="navigate(event, this)"  href="/Updates/{{post.date.date|urlencode:""}}/{{post.title|urlencode:""}}/Delete">
     Delete Post
     </a>
     {% endif %}
@@ -47,6 +47,7 @@ $("#content").keyup(function(event){
 function comment(){
 	data = {}
 	data.title = '{{post.title}}'
+	data.date = '{{post.date.date|urlencode:""}}'
 	data.author = $("#author")[0].value
 	data.content = $("#content")[0].value
 	$.post("/python/newComment", data, commentCallback)

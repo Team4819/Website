@@ -12,7 +12,7 @@ class editPost(webapp2.RequestHandler):
         else: user = auth.publicUser
         if(user.permissions < 2):
             return
-        post = posts.getPost(self.request.get('oldTitle'))
+        post = posts.getPost(self.request.get('oldTitle'),self.request.get('date'))
         post.title = self.request.get('title')
         post.content = self.request.get('content')
         post.author = user.firstName + " " + user.lastName
@@ -27,7 +27,7 @@ class deletePost(webapp2.RequestHandler):
         if(self.request.cookies.get("LoginStatus") == "LoggedIn"):
             user = auth.authorize(self.request.cookies.get("authKey"))
         else: user = auth.publicUser
-        post = posts.getPost(self.request.get('title'))
+        post = posts.getPost(self.request.get('title'),self.request.get('date'))
         if( post.author != user.firstName + " " + user.lastName and user.permissions < 3): return
         post.delete()
         self.response.out.write("Deleted Successfully")
