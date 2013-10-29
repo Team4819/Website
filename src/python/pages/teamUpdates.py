@@ -1,5 +1,5 @@
 from django.template import Context,loader
-from .. import posts
+from .. import posts, config
 import AccessDenied, PageNotFound, logging
 import urllib
 from datetime import datetime,tzinfo,timedelta,time
@@ -24,15 +24,45 @@ def getPage(request, resource, user):
     resource=str(urllib.unquote(resource))
     if(len(split) == 1):
         temp = loader.get_template("updates.html")
-        date = request.request.get("getBefore");
-        if(date == ""):date = datetime.now();
-        else: date = time.strptime(date, "%Y-%m-%d")
-        updates =  posts.getPostsBefore(date.date ,(user.permissions < 1))
-        if(updates.count() > 0):
-#            result = []
-#            for update in updates:
-#                result.append({"author": update.author, "title": update.title, "content": update.content, "date": update.date.astimezone(EST), "comments": update.comments})
-            cont = Context({"updates": updates, "user": user})
+        
+        
+        
+        before = request.request.get("getBefore");
+        after = request.request.get("getAfter");
+        
+        if(before != ""): 
+            updates = posts.getPostsBefore(datetime.strptime(before, "%Y-%m-%d-%H") ,(user.permissions < 1))
+        
+        elif(after != ""):
+            updates = posts.getPostsAfter(datetime.strptime(after, "%Y-%m-%d-%H") ,(user.permissions < 1))
+            
+        else:
+            updates = posts.getPostsBefore(datetime.now() ,(user.permissions < 1))
+        
+        
+        if(len(updates) > 0):
+            nextPage = None
+            prevPage = None
+            
+            if(after != ""):
+                nextPage = updates[len(updates) - 1].date.strftime("%Y-%m-%d-%H");
+                if(len(updates) == config.PostsPerPage + 1): 
+                    prevPage = updates[1].date.strftime("%Y-%m-%d-%H");
+                    updates.pop(0)
+                
+            if(before != ""):
+                prevPage = updates[0].date.strftime("%Y-%m-%d-%H");
+                if(len(updates) == config.PostsPerPage + 1):
+                    nextPage = updates[config.PostsPerPage - 1].date.strftime("%Y-%m-%d-%H");
+                    updates.pop()
+            
+            else:
+                if(len(updates) == config.PostsPerPage + 1):
+                    nextPage = updates[config.PostsPerPage - 1].date.strftime("%Y-%m-%d-%H");
+                    updates.pop()
+            
+            
+            cont = Context({"updates": updates, "user": user, "nextPage": nextPage, "prevPage": prevPage})
         else:
             cont = Context({"user": user})
         result = temp.render(cont).encode('utf-8')
@@ -46,28 +76,8 @@ def getPage(request, resource, user):
             return result
         else:
             return AccessDenied.getPage(resource, user)
-    
-
-    elif(split[1] != "New"):
-        
-
-            
-        if(split[1] == "Page"):
-            temp = loader.get_template("updates.html")
-            try:
-                page = split[2]
-                print("page");
-                updates = posts.getPostsOnPage(page, user.permissions < 1)
-                if(updates.count() > 0):
-                    cont = Context({"updates": updates, "user": user})
-                else:
-                    cont = Context({"user": user})
-                result = temp.render(cont).encode('utf-8')
-                return result
-            except IndexError:
-                return PageNotFound.getPage(resource)  
-            
-        elif(len(split) == 3):
+    elif(split[1] != "New"):            
+        if(len(split) == 3):
             temp = loader.get_template("post.html");
             try:
                 title = urllib.unquote(split[2].encode('ascii')).decode('utf-8')
@@ -80,7 +90,7 @@ def getPage(request, resource, user):
                 cont = Context({"post": post, "comments": comments, "user": user})
                 return temp.render(cont)
             except IndexError:
-                return PageNotFound.getPage(resource)
+                return PageNotFound.getPage(request, resource)
             
         elif(split[3] == "Edit"):
             if(user.permissions < 2): return AccessDenied.getPage(resource, user)
@@ -94,7 +104,7 @@ def getPage(request, resource, user):
                 cont = Context({"post": post, "user": user})
                 return temp.render(cont)
             except IndexError:
-                return PageNotFound.getPage(resource)
+                return PageNotFound.getPage(request, resource)
             
         elif(split[3] == "Delete"):
             if(user.permissions < 2): return AccessDenied.getPage(resource, user)
@@ -108,6 +118,6 @@ def getPage(request, resource, user):
                 cont = Context({"post": post, "user": user})
                 return temp.render(cont)
             except IndexError:
-                return PageNotFound.getPage(resource)
+                return PageNotFound.getPage(request, resource)
         
 
