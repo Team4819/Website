@@ -18,7 +18,7 @@ class MainHandler(webapp2.RequestHandler):
             user = auth.authorize(self.request.cookies.get("authKey"))
         if( user.permissions == 0 and self.request.cookies.get("Subscribed") == "True"):
             user.subscribed = True
-        content = getPage.getPage(resource, user)
+        content = getPage.getPage(self, resource, user)
         cont = Context({"content": content, "user": user})            
         result = temp.render(cont)
         self.response.headers['Content-Type'] = "text/html"

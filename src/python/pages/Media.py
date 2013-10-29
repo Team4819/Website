@@ -5,7 +5,7 @@ import AccessDenied, PageNotFound
 import logging, urllib
 
 
-def getPage(resource, user):
+def getPage(request, resource, user):
     split = str(resource).split("/")
     if(len(split) == 1):
         folders = media.getFolders(user.permissions == 0)

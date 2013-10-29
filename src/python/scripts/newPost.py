@@ -1,5 +1,4 @@
 import webapp2
-import datetime
 import logging
 from .. import auth, posts, email
 

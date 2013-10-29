@@ -4,20 +4,30 @@
     <h3>New Post</h3>
     </a>
     {% endif %}
+    {% if prevPage %}
+    <a class="button" style="float: right; clear: none; text-decoration: none;color:white;" onclick="navigate(event, this)"  href="/Updates?getAfter={{prevPage}}" >
+    <h3>Newer Updates</h3>
+    </a>
+    {% endif %}
     <div id="teamUpdates">
     {% if updates %}
     {% for post in updates %}
     <div class="post">
-    <a style="text-decoration: none; color: white;" onclick="navigate(event, this)" href="/Updates/{{post.title|urlencode:""}}"><h3>{{post.title}}</h3></a>
+    <a style="text-decoration: none; color: white;" onclick="navigate(event, this)" href="/Updates/{{post.date.date|urlencode:""}}/{{post.title|urlencode:""}}"><h3>{{post.title}}</h3></a>
     <div class='Content'>{{post.content|safe}}</div>
     <br/>
     <br/>
-    <a onclick="navigate(event, this)" href="/Updates/{{post.title|urlencode:""}}">{{post.comments}} comments</a>
+    <a onclick="navigate(event, this)" href="/Updates/{{post.date.date|urlencode:""}}/{{post.title|urlencode:""}}">{{post.comments}} comments</a>
     <br/>
     <p class='Author'><b>posted by {{post.author}}</b></p>
     <p class='date'>{{post.date}}</p>
     </div>
     {% endfor %}
+    {% if nextPage %}
+    <a class="button" style="float: right;text-decoration: none;color:white;" onclick="navigate(event, this)"  href="/Updates?getBefore={{nextPage}}" >
+    <h3>Older Updates</h3>
+    </a>
+    {% endif %}
     {% else %}
     <p>No posts found</p>
     {% endif %}

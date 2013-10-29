@@ -27,14 +27,13 @@ function load() {
 
 function navigate(e, target){
 	changePage(target.getAttribute('href'));
-	e.preventDefault()
-	
+	e.preventDefault();
 }
 
 function fillContent(data) {
     $("#Content").empty();
     $("#Content").append(data);
-    
+    window.scrollTo(0);
 }
 
 function togglePanel(panelRefrence){
