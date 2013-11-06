@@ -1,5 +1,5 @@
 application: firstteam4819
-version: 2-0-3
+version: 2-0-2
 runtime: python27
 api_version: 1
 threadsafe: yes
@@ -30,8 +30,8 @@ handlers:
   script: addpost.app
   
 - url: /favicon.ico
-  static_files: static/Images/Logo/favicon.ico
-  upload: static/Images/Logo/favicon.ico
+  static_files: static/favicon.ico
+  upload: static/favicon.ico
   
 - url: /static/media/(.*)
   script: python.media.app
@@ -60,9 +60,6 @@ handlers:
   script: python.scripts.newComment.app
   
 - url: /python/subscribe
-  script: python.scripts.subscribe.app
-
-- url: /python/unsubscribe
   script: python.scripts.subscribe.app
   
 - url: /python/deletePost

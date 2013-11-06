@@ -1,1 +1,0 @@
-fillContent('<div id="Code"><h1>Code</h1><p class="text">The code is not avaliable yet.</p></div>');

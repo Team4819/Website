@@ -1,1 +1,0 @@
-fillContent('<div id="News"><h1>News</h1><div id="News"></div><script src="getPosts.js"></script></div>');

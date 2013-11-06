@@ -8,6 +8,7 @@ class Subscribe(webapp2.RequestHandler):
             user = auth.authorize(self.request.cookies.get("authKey"))
         if(user.permissions == 0):
             auth.createPublicSubscribed(self.request.get('email'))
+            self.response.set_cookie("Subscribed", "True", 36000 , "/")
         else:
             emails = auth.findPublicEmail(user.email)
             if(emails.count() != 0):

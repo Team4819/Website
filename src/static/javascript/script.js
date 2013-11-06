@@ -100,7 +100,8 @@ function logoutCallback(data){
 
 function submitSubscribe(){
 	var data = {"email": $("#Subscribe #email")[0].value};
-	$.get("/python/subscribe", data, function(data){togglePanel("#SubscribedPanel")});
+	if(data == "")$.get("/python/subscribe", data, function(data){togglePanel("#SubscribedPanel")});
+	else $.get("/python/subscribe", data, function(data){togglePanel("#PublicSubscribedPanel")});
 }
 
 function submitUnsubscribe(){

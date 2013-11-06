@@ -151,6 +151,6 @@ def refreshAll():
                            "WHERE ANCESTOR IS :1",
                            UserTable_key())
     for user in users:
-	user.subscribed = True;
+	user.subscribed = true;
 	user.put();
 

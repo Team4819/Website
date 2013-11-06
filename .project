@@ -15,4 +15,24 @@
 		<nature>org.python.pydev.pythonNature</nature>
 		<nature>org.python.pydev.django.djangoNature</nature>
 	</natures>
+	<filteredResources>
+		<filter>
+			<id>1383760395204</id>
+			<name></name>
+			<type>22</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-false-false-*.pyc</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>1383760395206</id>
+			<name></name>
+			<type>22</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-false-false-*~</arguments>
+			</matcher>
+		</filter>
+	</filteredResources>
 </projectDescription>

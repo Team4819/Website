@@ -8,7 +8,7 @@ class Login(webapp2.RequestHandler):
         firstName = self.request.get('firstName')
         lastName = self.request.get('lastName')
         password = self.request.get('Password')
-        logging.info(firstName + " " + lastName + " " + password)
+        #logging.info(firstName + " " + lastName + " " + password)
         try:
             authKey = auth.logIn(firstName, lastName, password)
             user = auth.authorize(authKey)

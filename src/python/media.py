@@ -58,7 +58,7 @@ def getFolderThumbnail(folder):
                         "WHERE ANCESTOR IS :1 AND Type = 'image' "
                         "LIMIT 1", folder)
     if(files.count(1) == 0):
-        return "/static/folder-folder.png"
+        return "/static/Images/UI/folder-folder.png"
     return "/static/media/" + folder.Name + "/" + files[0].Name + "?resize=true&width=200&height=150"
 
 

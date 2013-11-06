@@ -9,7 +9,6 @@ class newComment(webapp2.RequestHandler):
         if(self.request.cookies.get("LoginStatus") == "LoggedIn"):
             user = auth.authorize(self.request.cookies.get("authKey"))
         else: user = auth.publicUser
-
         post = posts.getPost(self.request.get('title'), self.request.get('date'))
         comment = posts.Comment(parent=post)
         comment.content = self.request.get('content')

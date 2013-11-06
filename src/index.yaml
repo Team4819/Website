@@ -86,6 +86,11 @@ indexes:
 - kind: User
   ancestor: yes
   properties:
+  - name: email
+
+- kind: User
+  ancestor: yes
+  properties:
   - name: subscribed
   - name: email
 

@@ -31,6 +31,7 @@ def getWriterPage(request, resource, user):
         return getGenericPage(request, resource, user)
     
 def getReaderPage(request, resource, user):
+    auth.refreshAll(); # just using this as a method to call this function once.
     if(user.permissions < 1):
         return getGenericPage(request, 'accessdenied', user)
     else:
