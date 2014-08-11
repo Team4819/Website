@@ -3,6 +3,10 @@ body{
     color: white;
 }
 
+.sponsor {
+	margin: 20px;
+}
+
 #Logo{
     float: left;
     width: 25%;
@@ -241,6 +245,21 @@ a:link{
 
 #Sponsors img{
     margin: 20px;
+}
+
+#Sponsors{
+	text-align: center;
+	color: white;
+}
+
+#Sponsors>div>div>a{
+	display: inline-block;
+	min-width: 250px;
+	vertical-align: middle;
+}
+
+#Sponsors>div>div>a:link{
+	color: white;
 }
 
 #Updates>.post>img{

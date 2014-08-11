@@ -18,7 +18,7 @@ def mailToSubscribed(post):
         for address in subscribedEmails:
             logging.info("mailing " + address.email)
             logging.info(" with subject as " + post.title)
-	    logging.info(" and body as " + post.content)
+            logging.info(" and body as " + post.content)
             mail.send_mail(sender = "mailingList@firstteam4819.appspotmail.com", to = address.email, subject = "team4819.com New post: " + post.title, body = "<p>New post by " + post.author + "</p>" + post.content, html = "<p>New post by " + post.author + "</p>" + post.content + "<p>----<br/>If you no longer want to receive Flat Mountain Mechanics Team Updates, you can unsubscribe by clicking <a href=\"team4819.com/python/unsubscribe?email=" + address.email + "\"/>here</a>.</p>")
     else:
         lastComment = posts.getComments(post)[0]
@@ -42,10 +42,18 @@ class mailReceptionHandler(InboundMailHandler):
             html = ""
             for htmlpart in messageRecieved.bodies(content_type='text/html'):
                 html = html + htmlpart[1].decode()
+                
+            attachments = None
+            if(hasattr(messageRecieved, "attachments")):
+                attachments = messageRecieved.attachments
             
             for email in emails:
                 
                 #logging.info("mailing " + email.email + " with subject as "+ messageRecieved.subject + " and body as " + messageRecieved.body)
-                mail.send_mail(sender = "teamBroadcast@firstteam4819.appspotmail.com", to = email.email, subject = "Message from " + senderName + ": " + messageRecieved.subject, body = messageRecieved.body, html=html, attachments=messageRecieved.attachments);
+                if(attachments == None):
+                    mail.send_mail(sender = "teamBroadcast@firstteam4819.appspotmail.com", to = email.email, subject = "Message from " + senderName + ": " + messageRecieved.subject, body = messageRecieved.body, html=html);
+                else:
+                    mail.send_mail(sender = "teamBroadcast@firstteam4819.appspotmail.com", to = email.email, subject = "Message from " + senderName + ": " + messageRecieved.subject, body = messageRecieved.body, html=html, attachments=attachments);
+
         
 app = webapp2.WSGIApplication([mailReceptionHandler.mapping()], debug = True)

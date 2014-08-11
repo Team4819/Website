@@ -33,7 +33,7 @@ function navigate(e, target){
 function fillContent(data) {
     $("#Content").empty();
     $("#Content").append(data);
-    window.scrollTo(0);
+    $(window).scrollTop();
 }
 
 function togglePanel(panelRefrence){

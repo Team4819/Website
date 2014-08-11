@@ -1,5 +1,5 @@
 application: firstteam4819
-version: 2-0-3
+version: 2-1-0
 runtime: python27
 api_version: 1
 threadsafe: yes
@@ -11,23 +11,6 @@ handlers:
 
 
     
-- url: /upload.py
-  script: addImage.app
-
-- url: /addImage.py
-  script: addImage.app
-    
-- url: /getPosts.py 
-  script: getPosts.app
-  
-- url: /getMiniPosts.py
-  script: getPosts.app
-
-- url: /addPost.*
-  script: addpost.app
-  
-- url: /MainPage
-  script: addpost.app
   
 - url: /favicon.ico
   static_files: static/Images/Logo/favicon.ico

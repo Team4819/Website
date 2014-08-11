@@ -31,7 +31,7 @@ function uploadHtml(){
 data = {};
 data.title = $('#title')[0].value;
 data.html = CKEDITOR.instances.editor.getData();
-data.restricted = $('#restricted')[0].value;
+data.restricted = $('#restricted')[0].checked;
 $.post("/upload/html/{{folder.Name|urlencode:''}}", data, function(data){reloadContent();})
 }
 
@@ -46,7 +46,7 @@ $("#blobUpload").ajaxForm(function(){reloadContent()})
 {% if file.Type == "image" %}
 <img src="/static/media/{{folder.Name}}/{{file.Name}}?resize=true&width=200&height=150">
 {% elif file.Type == "html" %}
-<img src="/static/Nav/html-bracket.png" width="200">
+<img src="/static/Images/Nav/html-bracket.png" width="200">
 {% else %}
 <img src="/static/Images/UI/file_icon.png">
 {% endif %}

@@ -8,7 +8,7 @@ import logging, urllib
 def getPage(request, resource, user):
     if(user == 0):
         return AccessDenied.getPage(request, resource, user);
-    temp = loader.get_template("PageNotFound.html")
+    temp = loader.get_template("profile.html")
     cont = Context({})
     result = temp.render(cont)
     return result

@@ -1,0 +1,22 @@
+<h2>Login</h2>
+<div id="login">
+	<div id="loginPanel">
+		<div id="loginPrompt" class="panel">
+			<div><p>First Name:</p><input id="firstName" name="firstName"></input></div>
+			<div><p>Last Name:</p><input id="lastName" name="lastName"></input></div>
+			<div><p>Password:</p><input id="Password" name="Password" type="password"></input></div>
+			<p id="invalidLogin" hidden="true" style="color: red;">invalid login</p>
+		</div>
+		<a style="float: left; text-decoration: none; color: white;" class="button" onclick="login(); return false;" href="/Login">
+			<p>Log In</p>
+		</a>
+	</div>
+	<div id="loggingInPanel" hidden="true" class="panel"><p>Logging In..</p></div>
+</div>
+<script>
+$("#Password").keyup(function(event){
+    if(event.keyCode == 13){
+        login();
+    }
+});
+</script>
