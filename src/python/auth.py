@@ -13,34 +13,58 @@ class User(db.Model):
     lastName = db.StringProperty()
     lcaseName = db.StringProperty()
     passwordHash = db.StringProperty()
+
+    #Permissions key:
+    # 0: Public Restricted
+    # 1: Read-only Member, can read restricted content
+    # 2: Read-Write Member, can create and edit content, but only if he/she created it
+    # 3: Admin, can read, create, and edit everything
+
     permissions = db.IntegerProperty()
+
+    # teamStatus key
+    # 0: random dude from the internet
+    # 1: sponsor
+    # 2: student
+    # 3: parent
+    # 4; mentor
+
+    teamStatus = db.IntegerProperty()
     keyHash = db.StringProperty()
     email = db.EmailProperty()
     subscribed = db.BooleanProperty()
     number = db.PhoneNumberProperty()
-    
+
+
 class publicSubscribed(db.Model):
     email = db.EmailProperty()
-    
+
+
 class publicUser(User):
     firstName = "Public"
     lastName = "User"
     subscribed = False
     permissions = 0
-    
+    teamStatus = 0
+
+
 class authKey(db.Model):
     userKey = db.StringProperty()
     authKey = db.StringProperty()
     expirationDate = db.DateTimeProperty()
-    
+
+
 def UserTable_key():
     return db.Key.from_path('UserTable-version', 'UserTable-1')
+
 
 def KeyTable_key():
     return db.Key.from_path('KeyTable-version', 'KeyTable-1')
 
+
 class invalidLogon(Exception):
     pass
+
 
 def authorize(key):
     keyhash = hashlib.md5(key).hexdigest()
@@ -52,9 +76,9 @@ def authorize(key):
                            UserTable_key(), keyhash)[0]
     except IndexError:
         user = publicUser
-    if(user.subscribed == None):
-        user.subscribed = False;
-        user.put();
+    if user.subscribed is None:
+        user.subscribed = False
+        user.put()
     return user
     
 def logIn(firstName, lastName, password):
@@ -66,11 +90,10 @@ def logIn(firstName, lastName, password):
                         UserTable_key(), str(firstName).lower() + " " + str(lastName).lower())[0]
     except IndexError:
         user = publicUser
-        raise(invalidLogon)
-        
-        
-    if (user.passwordHash != hashlib.md5(password).hexdigest()): raise(invalidLogon)
-    
+        raise invalidLogon
+
+    if user.passwordHash != hashlib.md5(password).hexdigest(): raise(invalidLogon)
+
     key = id_generator(16)
     h = hashlib.md5(key).hexdigest()
     user.keyHash = h
@@ -84,6 +107,7 @@ def createUser(firstName, lastName, email, number, password):
     newuser.lcaseName = str(firstName).lower() + " " + str(lastName).lower()
     newuser.passwordHash = hashlib.md5(password).hexdigest()
     newuser.permissions = 1
+    newuser.teamStatus = 1
     newuser.email = email
     pemail = findPublicEmail(email)
     if(pemail.count() != 0):

@@ -84,10 +84,31 @@ handlers:
   
 - url: /_ah/mail/.+
   script: python.email.app
-  
+
+
+
 - url: /_ah/mail/teamBroadcast@firstteam4819.appspotmail.com
   script: python.email.app
-  
+
+
+
+- url: /_ah/mail/UniversalBroadcast@firstteam4819.appspotmail.com
+  script: python.email.app
+
+- url: /_ah/mail/SponsorBroadcast@firstteam4819.appspotmail.com
+  script: python.email.app
+
+- url: /_ah/mail/StudentBroadcast@firstteam4819.appspotmail.com
+  script: python.email.app
+
+- url: /_ah/mail/ParentBroadcast@firstteam4819.appspotmail.com
+  script: python.email.app
+
+- url: /_ah/mail/MentorBroadcast@firstteam4819.appspotmail.com
+  script: python.email.app
+
+
+
 # image files
 - url: /static/(.*\.(bmp|gif|ico|jpeg|jpg|png))
   static_files: static/\1

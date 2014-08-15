@@ -55,5 +55,6 @@ class mailReceptionHandler(InboundMailHandler):
                 else:
                     mail.send_mail(sender = "teamBroadcast@firstteam4819.appspotmail.com", to = email.email, subject = "Message from " + senderName + ": " + messageRecieved.subject, body = messageRecieved.body, html=html, attachments=attachments);
 
+def mailSender(statusLevel, sender, subject, body, subject, [attachments]):
         
 app = webapp2.WSGIApplication([mailReceptionHandler.mapping()], debug = True)
