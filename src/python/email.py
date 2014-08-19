@@ -4,10 +4,12 @@ from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
 import webapp2
 import logging
 import posts
-import auth
+import users
+import groups
+
 
 def mailToSubscribed(post):
-    sub = auth.getSubscribed()
+    sub = users.getSubscribed()
     subscribedEmails = sub.fetch(sub.count())
     
     
@@ -30,10 +32,9 @@ class mailReceptionHandler(InboundMailHandler):
     def receive(self, mail_message):
         logging.info("Email from "+ mail_message.sender)
         messageRecieved = mail.InboundEmailMessage(self.request.body);
+
         if(messageRecieved.to.lower() == "teambroadcast@firstteam4819.appspotmail.com"):
-            emails = auth.getAllEmails();
             sources = auth.lookupEmail(messageRecieved.sender);
-            source = auth.publicUser;
             senderName = messageRecieved.sender;
             if(sources.count() != 0): 
                 source = sources[0];
@@ -46,15 +47,19 @@ class mailReceptionHandler(InboundMailHandler):
             attachments = None
             if(hasattr(messageRecieved, "attachments")):
                 attachments = messageRecieved.attachments
-            
-            for email in emails:
-                
-                #logging.info("mailing " + email.email + " with subject as "+ messageRecieved.subject + " and body as " + messageRecieved.body)
-                if(attachments == None):
-                    mail.send_mail(sender = "teamBroadcast@firstteam4819.appspotmail.com", to = email.email, subject = "Message from " + senderName + ": " + messageRecieved.subject, body = messageRecieved.body, html=html);
-                else:
-                    mail.send_mail(sender = "teamBroadcast@firstteam4819.appspotmail.com", to = email.email, subject = "Message from " + senderName + ": " + messageRecieved.subject, body = messageRecieved.body, html=html, attachments=attachments);
 
-def mailSender(statusLevel, sender, subject, body, subject, [attachments]):
+            mailToUserGroup("public",senderName,"Message from " + senderName + ": " + messageRecieved.subject,messageRecieved.body, html, attachments)
+
+def mailToUserGroup(group, sender, subject, body, html, attachments = None):
+    logging.info("Sending email broadcast to user group " + str(UserGroup))
+    emails = auth.getGroupEmails(UserGroup)
+
+    for email in emails:
+        #logging.info("mailing " + email.email + " with subject as "+ messageRecieved.subject + " and body as " + messageRecieved.body)
+        if attachments is None:
+            mail.send_mail(sender, email.email, subject, body, html);
+        else:
+            mail.send_mail(sender, email.email, subject, body, html, attachments);
+
         
 app = webapp2.WSGIApplication([mailReceptionHandler.mapping()], debug = True)
