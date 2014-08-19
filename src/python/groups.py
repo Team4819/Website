@@ -9,7 +9,6 @@ import random
 class Group(db.Model):
     name = db.StringProperty()
 
-
     def getUsers(self):
         if self.name == "public":
             return db.GqlQuery('SELECT email '
@@ -33,7 +32,8 @@ def getGroup(name):
                        db_key(), name)
     if result.count() != 0:
         return result[0]
-    else
+    else:
+        raise noSuchGroup
 
 class noSuchGroup(Exception):
     pass
@@ -50,7 +50,10 @@ def newGroup(name):
         return
 
 def delGroup(name):
-    group = getGroup(name)
-    if group.count() != 0
-        group[0].delete()
-        logging.log("Group " + name + " deleted");
+    try:
+        group = getGroup(name)
+        if group.count() != 0
+            group[0].delete()
+            logging.log("Group " + name + " deleted")
+    except noSuchGroup:
+        logging.log("No such group to delete!")

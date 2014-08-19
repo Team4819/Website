@@ -1,10 +1,11 @@
 import webapp2
 import urllib
-import auth
+import users
+import groups
 
 from django import template
 from django.template import loader, Context
-from pages import about, PageNotFound, teamUpdates, Media
+from pages import about, PageNotFound, teamUpdates, Media, page
 from scripts import subscribe
 
 def getGenericPage(request, resource, user):
@@ -36,12 +37,14 @@ def getReaderPage(request, resource, user):
     else:
         return getGenericPage(request, resource, user)
     
+Pages = dict()
+Pages["none"] = page.pageBase(file="about.html")
+Pages["updates"] =
 
-            
-Pages = { "none": about.getPage, "updates": teamUpdates.getPage, "media": Media.getPage, "calendar": getReaderPage}
+Pages = {"none": about.getPage, "updates": teamUpdates.getPage, "media": Media.getPage, "calendar": getReaderPage}
 
 def getPage(request, resource, user):
-    split=resource.split("/")[0]
+    split = resource.split("/")[0]
     if(split != None): split = split.lower()
     try:
         result = Pages[split](request, resource, user)
@@ -53,8 +56,9 @@ def getPage(request, resource, user):
 class getPageHandler(webapp2.RequestHandler):
         def get(self, resource):
             if(self.request.cookies.get("LoginStatus") == "LoggedIn"):
-                user = auth.authorize(self.request.cookies.get("authKey"))
-            else: user = auth.publicUser
+                user = users.authorize(self.request.cookies.get("authKey"))
+            else:
+                user = users.publicUser
             
             self.response.headers["Content-Type"] = "text/html"
             self.response.out.write(getPage(self, resource, user))

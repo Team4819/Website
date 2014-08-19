@@ -5,10 +5,6 @@ from google.appengine.ext import db
 import random
 
 
-
-
-
-
 def getSubscribed():
     return db.GqlQuery('SELECT email '
                        'FROM User '

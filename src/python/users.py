@@ -35,7 +35,7 @@ class User(db.Model):
     #TODO Remove this, groups are enough now
     permissions = db.IntegerProperty()
 
-    groups = db.IntegerProperty()
+    groups = db.StringProperty()
     keyHash = db.StringProperty()
     email = db.EmailProperty()
 
@@ -44,6 +44,13 @@ class User(db.Model):
 
     number = db.PhoneNumberProperty()
 
+    def isGroup(self, group):
+        split = self.groups.split(",")
+        [x.strip().lower() for x in split]
+        if group.strip().lower() in split:
+            return True
+        else:
+            return False
 
 
 
