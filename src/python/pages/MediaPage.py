@@ -3,6 +3,7 @@ from google.appengine.ext import blobstore
 from .. import media
 import AccessDenied, PageNotFound
 import logging, urllib
+from src.python.pages.ErrorPages import PageNotFound, AccessDenied
 
 
 def getPage(request, resource, user):
@@ -19,7 +20,7 @@ def getPage(request, resource, user):
         return temp.render(cont)
     elif(len(split) == 2):
         folder = media.getFolder(urllib.unquote(split[1]))[0]
-        if(folder.Restricted and user.permissions == 0): return AccessDenied.getPage(resource, user)
+        if(folder.Restricted and user.permissions == 0): return AccessDenied(resource, user)
         files = media.getFiles(user.permissions == 0, folder)
         temp = loader.get_template("Folder.html")
         url = blobstore.create_upload_url(urllib.quote("/upload/media/" + split[1]))
@@ -28,7 +29,7 @@ def getPage(request, resource, user):
         
     elif(len(split) == 3):
         if(split[2] == "upload"):
-            if(user.permissions < 2):  return AccessDenied.getPage(resource, user)
+            if(user.permissions < 2):  return AccessDenied(resource, user)
             temp = loader.get_template("upload.html")
             url = blobstore.create_upload_url(urllib.quote("/upload/media/" + urllib.unquote(split[1])))
             cont = Context({"url": url, "user": user, "folder": urllib.unquote(split[1])})
@@ -36,10 +37,10 @@ def getPage(request, resource, user):
         else:
             try:
                 folder = media.getFolder(urllib.unquote(split[1]))[0]
-                if(folder.Restricted and user.permissions == 0): return AccessDenied.getPage(resource, user)
+                if(folder.Restricted and user.permissions == 0): return AccessDenied(resource, user)
                 f = media.getFile(urllib.unquote(split[2]), folder)
-                if(f.Restricted and user.permissions == 0): return AccessDenied.getPage(resource, user)
+                if(f.Restricted and user.permissions == 0): return AccessDenied(resource, user)
                 temp = loader.get_template("file.html")
                 cont = Context({"file": f, "folder": folder, "user": user})
                 return temp.render(cont)
-            except IndexError: return PageNotFound.getPage(resource)
+            except IndexError: return PageNotFound(resource)

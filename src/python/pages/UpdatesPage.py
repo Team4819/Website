@@ -5,6 +5,7 @@ import urllib
 from datetime import datetime,tzinfo,timedelta,time
 from PageBase import PageBase
 from PageHubBase import PageHubBase
+import ErrorPages
 
 class Zone(tzinfo):
     def __init__(self,offset,isdst,name):
@@ -18,8 +19,8 @@ class Zone(tzinfo):
     def tzname(self,dt):
         return self.name
 
-GMT = Zone(0,False,'GMT')
-EST = Zone(-5,False,'EST')
+GMT = Zone(0, False, 'GMT')
+EST = Zone(-5, False, 'EST')
 
 class UpdatesPage(PageHubBase):
     def __init__(self):
@@ -41,7 +42,7 @@ class MainUpdatesPage(PageBase):
         elif(after != ""):
             updates = posts.getPostsAfter(datetime.strptime(after, "%Y-%m-%d-%H") ,(user.permissions < 1))
         else:
-            updates = posts.getPostsBefore(datetime.now() ,(user.permissions < 1))
+            updates = posts.getPostsBefore(datetime.now(), (user.permissions < 1))
 
         if(len(updates) > 0):
             nextPage = None
@@ -73,16 +74,13 @@ class MainUpdatesPage(PageBase):
 class NewUpdatePage(PageBase):
 
     def __init__(self):
-        super.__init__()
+        super(self, group="poster").__init__()
 
     def getPage(self, request, resource, user):
-        if user.isGroup("poster"):
-            temp = loader.get_template("newpost.html")
-            cont = Context({"user": user})
-            result = temp.render(cont)
-            return result
-        else:
-            return AccessDenied.getPage(resource, user)
+        temp = loader.get_template("newpost.html")
+        cont = Context({"user": user})
+        result = temp.render(cont)
+        return result
 
 
 class PostPagesHub(PageHubBase):
@@ -95,10 +93,15 @@ class PostPagesHub(PageHubBase):
 
         title = urllib.unquote(split[1].encode('ascii')).decode('utf-8')
         date = urllib.unquote(split[0].encode('ascii')).decode('utf-8')
-        post = posts.getPost(title, date)
+        try:
+            post = posts.getPost(title, date)
+        except IndexError:
+            return ErrorPages.PageNotFound(request, resource);
 
         try:
             spoke = self.spokes[split[2].lower]
+
+
             result = spoke.getPage(request, split[2], user, post)
 
         except KeyError:
@@ -107,72 +110,44 @@ class PostPagesHub(PageHubBase):
         return result
 
 class PostPage(PageBase):
+    def getPage(self, request, resource, user, post):
+        temp = loader.get_template("post.html");
+        if(user.permissions < 1 & post.restricted):
+            return ErrorPages.AccessDenied(request, resource, user)
+        comments = posts.getComments(post)
+        if(comments.count() == 0): comments = None
+        cont = Context({"post": post, "comments": comments, "user": user})
+        return temp.render(cont)
 
 
 class PostEditPage(PageBase):
     def getPage(self, request, resource, user, post):
-        if user.isGroup("poster") == False: return AccessDenied.getPage(request, resource, user)
+        if user.isGroup("poster") == False: return ErrorPages.AccessDenied(request, resource, user)
         try:
 
             if(post.author != user.firstName+" "+user.lastName and user.permissions < 3):
-                return AccessDenied.getPage(request, resource, user)
+                return ErrorPages.AccessDenied(request, resource, user)
             temp = loader.get_template("editpost.html")
             cont = Context({"post": post, "user": user})
             return temp.render(cont)
         except IndexError:
-            return PageNotFound.getPage(request, resource)
+            return ErrorPages.PageNotFound(request, resource)
 
-def getPage(request, resource, user):
-    split = str(resource).split('/')
-    resource=str(urllib.unquote(resource))
 
-    if(len(split) == 1):
+class PostDeletePage(PageBase):
+    def getPage(self, request, resource, user, post):
+        if(post.author != user.firstName+" "+user.lastName and user.permissions < 3):
+            return ErrorPages.AccessDenied(request, resource, user)
+        temp = loader.get_template("deletepost.html")
+        cont = Context({"post": post, "user": user})
+        return temp.render(cont)
 
-    
-    elif(split[1] == "New"):
+class PostRemailPage(PageBase):
+    def getPage(self, request, resource, user, post):
+        if(user.permissions < 2): return ErrorPages.AccessDenied(request, resource, user)
+        email.mailToSubscribed(post)
+        return "Re-emailed Everyone."
 
-    elif(split[1] != "New"):
 
-        if(len(split) == 3):
-            temp = loader.get_template("post.html");
-            try:
-                title = urllib.unquote(split[2].encode('ascii')).decode('utf-8')
-                date = urllib.unquote(split[1].encode('ascii')).decode('utf-8')
-                logging.info(title)
-                post = posts.getPost(title, date);
-                if(user.permissions < 1 & post.restricted): return AccessDenied.getPage(request, resource, user)
-                comments = posts.getComments(post)
-                if(comments.count() == 0): comments = None
-                cont = Context({"post": post, "comments": comments, "user": user})
-                return temp.render(cont)
-            except IndexError:
-                return PageNotFound.getPage(request, resource)
-            
-        elif(split[3] == "Edit"):
-
-            
-        elif(split[3] == "Delete"):
-            if(user.permissions < 2): return AccessDenied.getPage(request, resource, user)
-            try:
-                title = urllib.unquote(split[2].encode('ascii')).decode('utf-8')
-                date = urllib.unquote(split[1].encode('ascii')).decode('utf-8')
-                post = posts.getPost(title, date);
-                if(post.author != user.firstName+" "+user.lastName and user.permissions < 3):
-                    return AccessDenied.getPage(request, resource, user)
-                temp = loader.get_template("deletepost.html")
-                cont = Context({"post": post, "user": user})
-                return temp.render(cont)
-            except IndexError:
-                return PageNotFound.getPage(request, resource)
-        elif(split[3] == "remail"):
-		if(user.permissions < 2): return AccessDenied.getPage(request, resource, user)
-		try:
-                    title = urllib.unquote(split[2].encode('ascii')).decode('utf-8')
-                    date = urllib.unquote(split[1].encode('ascii')).decode('utf-8')
-                    post = posts.getPost(title, date);
-                    email.mailToSubscribed(post);
-                    return "Re-emailed Everyone."
-		except IndexError:
-		    return PageNotFound.getPage(request, resource)
         
 

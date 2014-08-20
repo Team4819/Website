@@ -1,5 +1,6 @@
 import webapp2
 import urllib
+from src.python.pages.ErrorPages import PageNotFound
 import users
 import groups
 
@@ -14,7 +15,7 @@ def getGenericPage(request, resource, user):
         temp = loader.get_template(resource.lower() + ".html")
         
     except template.TemplateDoesNotExist:
-        return PageNotFound.getPage(request, resource)
+        return PageNotFound(request, resource)
         
     cont = Context({"user": user}) 
     return temp.render(cont) 
