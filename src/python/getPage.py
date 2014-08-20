@@ -5,7 +5,7 @@ import groups
 
 from django import template
 from django.template import loader, Context
-from pages import about, PageNotFound, teamUpdates, Media, page
+from pages import about, PageNotFound, UpdatesPage, MediaPage, PageBase
 from scripts import subscribe
 
 def getGenericPage(request, resource, user):
@@ -38,10 +38,10 @@ def getReaderPage(request, resource, user):
         return getGenericPage(request, resource, user)
     
 Pages = dict()
-Pages["none"] = page.pageBase(file="about.html")
+Pages["none"] = PageBase.PageBase(file="about.html")
 Pages["updates"] =
 
-Pages = {"none": about.getPage, "updates": teamUpdates.getPage, "media": Media.getPage, "calendar": getReaderPage}
+Pages = {"none": about.getPage, "updates": UpdatesPage.getPage, "media": MediaPage.getPage, "calendar": getReaderPage}
 
 def getPage(request, resource, user):
     split = resource.split("/")[0]

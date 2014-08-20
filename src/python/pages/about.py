@@ -1,7 +1,7 @@
 from django.template import Context,loader
-from pages import page
+from pages import PageBase
 
-class aboutPage(page.pageBase):
+class aboutPage(PageBase.pageBase):
 
     group = "public"
 

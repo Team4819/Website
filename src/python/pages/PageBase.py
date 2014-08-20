@@ -6,11 +6,10 @@ from django import template
 from django.template import loader, Context
 from pages import PageNotFound
 
-class pageBase:
+class PageBase:
     group = "public"
     file = None
     def __init__(self, group="public", file=None ):
-
         self.group = group
         self.file = file
 
@@ -18,7 +17,7 @@ class pageBase:
 
     def getPage(self, request, resource, user):
         #First, check permissions
-        if user.isGroup(group) or user.isGroup("admin"):
+        if user.isGroup(self.group) or user.isGroup("admin"):
             #Check and see if we must ignore the request and fetch our own file
             if self.file is None:
                 #apparently not
