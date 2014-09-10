@@ -1,7 +1,6 @@
-from django.template import Context,loader
+from django.template import Context, loader
 from google.appengine.ext import blobstore
 from .. import media
-import AccessDenied, PageNotFound
 import logging, urllib
 from src.python.pages.ErrorPages import PageNotFound, AccessDenied
 

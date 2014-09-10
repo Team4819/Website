@@ -1,5 +1,5 @@
 import webapp2
-from .. import auth
+from .. import users
 
 class CreateUser(webapp2.RequestHandler):
     def post(self):
@@ -8,9 +8,9 @@ class CreateUser(webapp2.RequestHandler):
         password = self.request.get('Password')
         email = self.request.get('Email')
         number = self.request.get('Number')
-        auth.createUser(firstName, lastName, email, number, password)
-        authKey = auth.logIn(firstName, lastName, password)
-        user = auth.authorize(authKey)
+        users.create_user(firstName, lastName, email, number, password)
+        authKey = users.log_in(firstName, lastName, password)
+        user = users.authorize(authKey)
         self.response.set_cookie("authKey", authKey, 36000 , "/")
         self.response.set_cookie("LoginStatus", "LoggedIn", 36000 , "/")
         self.response.set_cookie("Subscribed", str(user.subscribed), 36000 , "/")

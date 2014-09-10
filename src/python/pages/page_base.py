@@ -2,36 +2,36 @@ __author__ = 'christian'
 
 import webapp2
 import urllib
+from .. import users
 from django import template
 from django.template import loader, Context
-from pages import PageNotFound
+
 
 class PageBase:
     group = "public"
-    file = None
-    def __init__(self, group="public", file=None ):
+    f = None
+
+    def __init__(self, group="public", f=None):
         self.group = group
-        self.file = file
+        self.f = f
 
-
-
-    def getPage(self, request, resource, user):
+    def get_page(self, request, resource):
         #First, check permissions
-        if user.isGroup(self.group) or user.isGroup("admin"):
+        if users.currentUser.isGroup(self.group) or users.currentUser.isGroup("admin"):
             #Check and see if we must ignore the request and fetch our own file
-            if self.file is None:
+            if self.f is None:
                 #apparently not
-                pageFile = str(urllib.unquote(resource)).lower()
+                pagefile = str(urllib.unquote(resource)).lower()
             else:
                 #Ok, will get own file
-                pageFile = file
+                pagefile = self.f
             try:
-                temp = loader.get_template(pageFile + ".html")
+                temp = loader.get_template(pagefile + ".html")
             except template.TemplateDoesNotExist:
                 #Oops, never heard of that file!
                 temp = loader.get_template("PageNotFound.html")
         else:
             #Red Card! We have an intruder on our site!
-            temp = loader.get_template("AccessDenied.py")
-        cont = Context({"user": user})
+            temp = loader.get_template("accessdenied.html")
+        cont = Context({"user": users.currentUser})
         return temp.render(cont)

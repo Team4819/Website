@@ -9,7 +9,7 @@ import random
 class Group(db.Model):
     name = db.StringProperty()
 
-    def getUsers(self):
+    def get_users(self):
         if self.name == "public":
             return db.GqlQuery('SELECT email '
                                'FROM publicSubscribed '
@@ -25,7 +25,8 @@ class Group(db.Model):
 def db_key():
     return db.Key.from_path('GroupTable-version', 'GroupTable-1')
 
-def getGroup(name):
+
+def get_group(name):
     result = db.GqlQuery('SELECT * '
                        'FROM Group '
                        'WHERE ANCESTOR IS :1 AND group = :2',
@@ -33,14 +34,15 @@ def getGroup(name):
     if result.count() != 0:
         return result[0]
     else:
-        raise noSuchGroup
+        raise NoSuchGroup
 
-class noSuchGroup(Exception):
+
+class NoSuchGroup(Exception):
     pass
 
 
-def newGroup(name):
-    if getGroup(name).count() != 0:
+def new_group(name):
+    if get_group(name).count() != 0:
         newgroup = Group(parent=db_key())
         newgroup.name = name
         newgroup.put()
@@ -49,11 +51,8 @@ def newGroup(name):
         logging.log("Already group with name " + name)
         return
 
-def delGroup(name):
-    try:
-        group = getGroup(name)
-        if group.count() != 0
-            group[0].delete()
-            logging.log("Group " + name + " deleted")
-    except noSuchGroup:
-        logging.log("No such group to delete!")
+
+def delete_group(name):
+    group = get_group(name)
+    group[0].delete()
+    logging.log("Group " + name + " deleted")

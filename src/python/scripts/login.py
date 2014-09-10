@@ -1,7 +1,7 @@
 import webapp2
 import datetime
 import logging
-from .. import auth
+from .. import users
 
 class Login(webapp2.RequestHandler):
     def post(self):
@@ -10,13 +10,13 @@ class Login(webapp2.RequestHandler):
         password = self.request.get('Password')
         #logging.info(firstName + " " + lastName + " " + password)
         try:
-            authKey = auth.logIn(firstName, lastName, password)
-            user = auth.authorize(authKey)
+            authKey = users.log_in(firstName, lastName, password)
+            user = users.authorize(authKey)
             self.response.set_cookie("authKey", authKey, 360000 , "/")
             self.response.set_cookie("LoginStatus", "LoggedIn", 360000 , "/")
             self.response.set_cookie("Subscribed", str(user.subscribed), 360000 , "/")
             self.response.out.write(user.firstName)
-        except auth.invalidLogon:
+        except users.invalidLogon:
             self.response.set_cookie("loginStatus", "InvalidLogin", 360000 , "/")
             self.response.out.write('InvalidLogin')
         
