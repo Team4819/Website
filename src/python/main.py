@@ -1,6 +1,7 @@
 import webapp2
 import getPage
 import auth
+import urllib
 import users
 
 from pages import main_pagehub
@@ -12,6 +13,8 @@ class MainHandler(webapp2.RequestHandler):
     def get(self, resource):
         resource = str(resource)
         users.get_session(self.request)
+
+
 
         temp = loader.get_template("index.html")
         hub = main_pagehub.pagehub()

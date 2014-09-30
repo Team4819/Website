@@ -12,11 +12,14 @@ class Zone(tzinfo):
         self.offset = offset
         self.isdst = isdst
         self.name = name
+
     def utcoffset(self, dt):
         return timedelta(hours=self.offset) + self.dst(dt)
+
     def dst(self, dt):
         return timedelta(hours=1) if self.isdst else timedelta(0)
-    def tzname(self,dt):
+
+    def tzname(self, dt):
         return self.name
 
 GMT = Zone(0, False, 'GMT')
@@ -32,9 +35,12 @@ class UpdatesPage(PagehubBase):
 
 
 class MainUpdatesPage(PageBase):
-    def get_page(self, request, resource):
-        temp = loader.get_template("updates.html")
+    def get_page(self, request, resource, parent):
+        r, w = self.check_permissions()
+        if not r:
+            return ErrorPages.AccessDenied(request, resource)
 
+        temp = loader.get_template("updates.html")
         before = request.request.get("getBefore")
         after = request.request.get("getAfter")
 
@@ -50,20 +56,20 @@ class MainUpdatesPage(PageBase):
             prevPage = None
 
             if(after != ""):
-                nextPage = updates[len(updates) - 1].date.strftime("%Y-%m-%d-%H");
+                nextPage = updates[len(updates) - 1].date.strftime("%Y-%m-%d-%H")
                 if(len(updates) == config.PostsPerPage + 1):
-                    prevPage = updates[1].date.strftime("%Y-%m-%d-%H");
+                    prevPage = updates[1].date.strftime("%Y-%m-%d-%H")
                     updates.pop(0)
 
             if(before != ""):
-                prevPage = updates[0].date.strftime("%Y-%m-%d-%H");
+                prevPage = updates[0].date.strftime("%Y-%m-%d-%H")
                 if(len(updates) == config.PostsPerPage + 1):
-                    nextPage = updates[config.PostsPerPage - 1].date.strftime("%Y-%m-%d-%H");
+                    nextPage = updates[config.PostsPerPage - 1].date.strftime("%Y-%m-%d-%H")
                     updates.pop()
 
             else:
                 if(len(updates) == config.PostsPerPage + 1):
-                    nextPage = updates[config.PostsPerPage - 1].date.strftime("%Y-%m-%d-%H");
+                    nextPage = updates[config.PostsPerPage - 1].date.strftime("%Y-%m-%d-%H")
                     updates.pop()
 
             cont = Context({"updates": updates, "user": users.currentUser, "nextPage": nextPage, "prevPage": prevPage})
@@ -78,7 +84,11 @@ class NewUpdatePage(PageBase):
     def __init__(self):
         PageBase.__init__(self, group="poster")
 
-    def get_page(self, request, resource):
+    def get_page(self, request, resource, parent):
+        r, w = parent.check_permissions()
+        if not w:
+            return ErrorPages.AccessDenied(request, resource)
+
         temp = loader.get_template("newpost.html")
         cont = Context({"user": users.currentUser})
         result = temp.render(cont)

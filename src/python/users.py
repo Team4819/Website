@@ -9,6 +9,7 @@ import publicSubscribed
 class User(db.Model):
     firstName = db.StringProperty()
     lastName = db.StringProperty()
+    fullName = db.StringProperty()
     lcaseName = db.StringProperty()
     passwordHash = db.StringProperty()
 
@@ -45,6 +46,7 @@ class User(db.Model):
 class publicUser(User):
     firstName = "Public"
     lastName = "User"
+    fullname = "Public User"
     groups = "public"
     subscribed = False
     permissions = 0
@@ -76,6 +78,7 @@ def create_user(firstName, lastName, email, number, password):
     newuser = User(parent=db_key())
     newuser.firstName = firstName
     newuser.lastName = lastName
+    newuser.fullName = firstName + " " + lastName
     newuser.lcaseName = str(firstName).lower() + " " + str(lastName).lower()
     newuser.passwordHash = hashlib.md5(password).hexdigest()
     newuser.permissions = 1
